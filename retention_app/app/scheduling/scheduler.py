@@ -41,30 +41,47 @@ class ReminderScheduler:
         content = session.get(models.Content, state.content_id)
         if not content:
             return
+
+        now = datetime.utcnow()
         url = f"{settings.app_base_url}/content/{content.id}"
         subject = reminder_subject(content.title)
         body = reminder_body(content.title, url)
-        session.add(
-            models.Notification(
-                content_id=content.id,
-                kind=models.NotificationKind.email,
-                scheduled_for=datetime.utcnow(),
-                status=models.NotificationStatus.pending,
-            )
-        )
-        session.commit()
-        session.refresh(content)
-        session.commit()
-        session.expire_all()
-        session.close()
-        # send outside of db transaction
-        session = self.session_factory()
-        session.close()
-        # async email not awaited here; in real app integrate async loop
-        try:
-            import asyncio
 
-            asyncio.run(send_email_reminder(subject, body))
-        except Exception:
-            pass
-        system_notify(subject, body)
+        email_notification = models.Notification(
+            content_id=content.id,
+            kind=models.NotificationKind.email,
+            scheduled_for=now,
+            status=models.NotificationStatus.pending,
+        )
+        session.add(email_notification)
+
+        system_notification = models.Notification(
+            content_id=content.id,
+            kind=models.NotificationKind.system,
+            scheduled_for=now,
+            status=models.NotificationStatus.pending,
+        )
+        session.add(system_notification)
+        session.commit()
+
+        try:
+            send_email_reminder(subject, body)
+            email_notification.status = models.NotificationStatus.sent
+            email_notification.sent_at = datetime.utcnow()
+            email_notification.error = None
+        except Exception as exc:  # noqa: BLE001
+            email_notification.status = models.NotificationStatus.failed
+            email_notification.error = str(exc)
+
+        try:
+            system_notify(subject, body)
+            system_notification.status = models.NotificationStatus.sent
+            system_notification.sent_at = datetime.utcnow()
+            system_notification.error = None
+        except Exception as exc:  # noqa: BLE001
+            system_notification.status = models.NotificationStatus.failed
+            system_notification.error = str(exc)
+
+        session.add(email_notification)
+        session.add(system_notification)
+        session.commit()

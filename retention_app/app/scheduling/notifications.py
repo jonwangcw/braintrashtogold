@@ -1,27 +1,32 @@
 from datetime import datetime
-
-import aiosmtplib
 from email.message import EmailMessage
+import smtplib
 
 from app.config import settings
 
 
-async def send_email_reminder(subject: str, body: str) -> None:
+def send_email_reminder(subject: str, body: str) -> None:
     if not settings.smtp_host or not settings.email_to or not settings.email_from:
         return
+
     message = EmailMessage()
     message["From"] = settings.email_from
     message["To"] = settings.email_to
     message["Subject"] = subject
     message.set_content(body)
-    await aiosmtplib.send(
-        message,
-        hostname=settings.smtp_host,
-        port=settings.smtp_port or 587,
-        username=settings.smtp_username,
-        password=settings.smtp_password,
-        start_tls=True,
-    )
+
+    with smtplib.SMTP(settings.smtp_host, settings.smtp_port or 587, timeout=20) as client:
+        client.ehlo()
+        try:
+            client.starttls()
+            client.ehlo()
+        except smtplib.SMTPException:
+            pass
+
+        if settings.smtp_username and settings.smtp_password:
+            client.login(settings.smtp_username, settings.smtp_password)
+
+        client.send_message(message)
 
 
 def system_notify(title: str, message: str) -> None:
