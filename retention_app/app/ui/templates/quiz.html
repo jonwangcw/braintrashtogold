@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <a href="/">← Back</a>
+    <h1>{{ kind|title }} Quiz</h1>
+    <p>Quiz questions will appear here once generated.</p>
+    <form method="post" action="/quiz/0/submit">
+      <button type="submit">Submit (placeholder)</button>
+    </form>
+  </main>
+</body>
+</html>
