@@ -22,3 +22,11 @@ Visit `http://localhost:8000`.
 
 - SQLite database file is created as `app.db` in the project root.
 - Scheduling is handled by APScheduler and runs in-process.
+
+## Testing
+
+Run the test suite from the `retention_app` directory:
+
+```bash
+pytest
+```
