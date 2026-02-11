@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Content Detail</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <a href="/">← Back</a>
+    {% if content %}
+      <h1>{{ content.title }}</h1>
+      <p>Type: {{ content.content_type }}</p>
+      <p>Status: {{ content.status }}</p>
+      <p>Source: {{ content.source_url }}</p>
+      <div class="actions">
+        <a class="button" href="/quiz/{{ content.id }}/scheduled">Scheduled quiz</a>
+        <a class="button" href="/quiz/{{ content.id }}/practice">Practice quiz</a>
+      </div>
+    {% else %}
+      <p>Content not found.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
