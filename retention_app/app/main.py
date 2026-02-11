@@ -1,3 +1,5 @@
+import asyncio
+import sys
 from datetime import datetime
 
 from fastapi import FastAPI, Form, Request
@@ -11,6 +13,13 @@ from app.services.content_service import ingest_content
 
 
 Base.metadata.create_all(bind=engine)
+
+def configure_windows_event_loop_policy() -> None:
+    if sys.platform == "win32":
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+
+
+configure_windows_event_loop_policy()
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/ui/static"), name="static")

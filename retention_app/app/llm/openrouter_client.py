@@ -7,6 +7,8 @@ class OpenRouterClient:
     def __init__(self) -> None:
         self.api_key = settings.openrouter_api_key
         self.model = settings.openrouter_model
+        if not self.api_key:
+            raise ValueError("OPENROUTER_API_KEY is required for question generation")
 
     async def complete(self, prompt: str) -> str:
         headers = {

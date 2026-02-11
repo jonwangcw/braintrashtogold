@@ -4,6 +4,8 @@ from app.config import settings
 
 
 async def transcribe_audio(file_path: str) -> str:
+    if not settings.openai_api_key:
+        raise ValueError("OPENAI_API_KEY is required for transcription")
     headers = {"Authorization": f"Bearer {settings.openai_api_key}"}
     data = {"model": "gpt-4o-mini-transcribe"}
     async with httpx.AsyncClient() as client:
