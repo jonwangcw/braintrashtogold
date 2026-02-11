@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Retention App</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Retention App</h1>
+    <section class="card">
+      <h2>Ingest Content</h2>
+      <form method="post" action="/ingest">
+        <label>
+          Title
+          <input type="text" name="title" placeholder="Optional title" />
+        </label>
+        <label>
+          Source type
+          <select name="source_type">
+            <option value="webpage">Webpage</option>
+            <option value="pdf">PDF</option>
+            <option value="youtube">YouTube</option>
+          </select>
+        </label>
+        <label>
+          URL
+          <input type="url" name="url" required />
+        </label>
+        <button type="submit">Ingest</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Library</h2>
+      {% if contents %}
+        <ul class="list">
+          {% for content in contents %}
+            <li>
+              <a href="/content/{{ content.id }}">{{ content.title }}</a>
+              <span class="status">{{ content.status }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No content yet.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
