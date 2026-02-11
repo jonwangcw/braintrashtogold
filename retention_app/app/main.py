@@ -21,6 +21,36 @@ def configure_windows_event_loop_policy() -> None:
 
 configure_windows_event_loop_policy()
 
+
+def should_suppress_asyncio_write_send_assertion(context: dict) -> bool:
+    message = str(context.get("message", ""))
+    if "_SelectorSocketTransport._write_send" not in message:
+        return False
+
+    exc = context.get("exception")
+    if not isinstance(exc, AssertionError):
+        return False
+
+    return "Data should not be empty" in str(exc)
+
+
+def install_asyncio_exception_filter() -> None:
+    loop = asyncio.get_event_loop()
+    previous_handler = loop.get_exception_handler()
+
+    def _handler(loop_obj, context):
+        if should_suppress_asyncio_write_send_assertion(context):
+            return
+        if previous_handler is not None:
+            previous_handler(loop_obj, context)
+        else:
+            loop_obj.default_exception_handler(context)
+
+    loop.set_exception_handler(_handler)
+
+
+install_asyncio_exception_filter()
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/ui/static"), name="static")
 
