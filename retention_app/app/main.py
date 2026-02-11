@@ -48,8 +48,12 @@ def content_detail(request: Request, content_id: int):
 async def ingest(source_type: str = Form(...), url: str = Form(...), title: str = Form("")):
     if not title:
         title = url
+    print(f"[DEBUG] /ingest called source_type={source_type} url={url} title={title}")
     with SessionLocal() as session:
-        await ingest_content(session, title, source_type, url)
+        result = await ingest_content(session, title, source_type, url)
+        print(
+            f"[DEBUG] /ingest completed content_id={result.id} status={result.status} error={result.error_message}"
+        )
     return RedirectResponse(url="/", status_code=303)
 
 

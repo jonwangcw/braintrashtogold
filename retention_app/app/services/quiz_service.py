@@ -14,7 +14,11 @@ async def create_question_set(
     cleaned_text: str,
     kind: models.QuestionSetKind = models.QuestionSetKind.scheduled,
 ) -> models.QuestionSet:
+    print(
+        f"[DEBUG] create_question_set:start content_id={content_id} kind={kind} cleaned_text_len={len(cleaned_text)}"
+    )
     generated = await generate_questions(cleaned_text, str(content_id))
+    print(f"[DEBUG] create_question_set:generated questions_count={len(generated.questions)}")
 
     question_set = models.QuestionSet(
         content_id=content_id,
@@ -40,6 +44,7 @@ async def create_question_set(
 
     session.commit()
     session.refresh(question_set)
+    print(f"[DEBUG] create_question_set:committed question_set_id={question_set.id}")
     return question_set
 
 
