@@ -9,7 +9,17 @@ async def generate_questions(cleaned_text: str, content_id: str) -> QuestionSetO
     client = OpenRouterClient()
     prompt = question_generation_prompt(cleaned_text)
     response = await client.complete(prompt)
-    payload = json.loads(response)
+    stripped = response.strip()
+    if not stripped:
+        raise ValueError("Question generation returned empty response from LLM")
+    try:
+        payload = json.loads(stripped)
+    except json.JSONDecodeError as exc:
+        preview = stripped[:500]
+        raise ValueError(
+            "Question generation returned non-JSON output. "
+            f"Response preview: {preview}"
+        ) from exc
     question_set = QuestionSetOutput.model_validate(payload)
     question_set.content_id = content_id
     return question_set

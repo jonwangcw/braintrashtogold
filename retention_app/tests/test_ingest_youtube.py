@@ -43,4 +43,4 @@ def test_youtube_ingest_wraps_download_error(monkeypatch):
 def test_youtube_base_options_enable_node_runtime():
     opts = youtube_module._youtube_base_options()
     assert opts["js_runtime"] == "node"
-    assert opts["js_runtimes"]["node"] == "node"
+    assert opts["js_runtimes"]["node"]["path"] == "node"

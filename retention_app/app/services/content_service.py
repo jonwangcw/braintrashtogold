@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import hashlib
+import traceback
 
 from sqlalchemy.orm import Session
 
@@ -36,5 +37,6 @@ async def ingest_content(
         crud.set_content_ready(session, content)
         crud.init_schedule_state(session, content.id, datetime.utcnow() + timedelta(days=1))
     except Exception as exc:  # noqa: BLE001
+        traceback.print_exc()
         crud.set_content_error(session, content, str(exc))
     return content
