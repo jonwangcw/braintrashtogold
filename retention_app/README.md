@@ -30,3 +30,11 @@ Run the test suite from the `retention_app` directory:
 ```bash
 pytest
 ```
+
+## Troubleshooting
+
+### YouTube ingestion: JavaScript runtime warning/error
+
+If `yt-dlp` prints a warning about missing JS runtime support (for example, `No supported JavaScript runtime could be found`), install a JS runtime such as **Node.js** or **Deno** and retry.
+
+On some environments, YouTube extraction may fail without this runtime, and the app will set content status to `error` with the underlying message.

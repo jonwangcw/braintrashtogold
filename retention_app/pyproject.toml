@@ -23,6 +23,7 @@ dependencies = [
   "apscheduler>=3.10",
   "aiosmtplib>=3.0",
   "plyer>=2.1",
+  "python-multipart>=0.0.9",
 ]
 
 [project.optional-dependencies]

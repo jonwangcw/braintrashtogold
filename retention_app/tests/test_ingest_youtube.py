@@ -1,6 +1,7 @@
 import asyncio
 
 import pytest
+from yt_dlp.utils import DownloadError
 
 pytest.importorskip("yt_dlp")
 
@@ -25,3 +26,21 @@ def test_youtube_ingest_downloads_and_transcribes(monkeypatch):
 
     result = asyncio.run(youtube_module.ingest_youtube("https://example.com/video"))
     assert result == "transcript"
+
+
+def test_youtube_ingest_wraps_download_error(monkeypatch):
+    monkeypatch.setattr(youtube_module, "get_youtube_duration_seconds", lambda _: 120)
+
+    def raise_download_error(url, output_dir):
+        raise DownloadError("No supported JavaScript runtime")
+
+    monkeypatch.setattr(youtube_module, "download_youtube_audio", raise_download_error)
+
+    with pytest.raises(ValueError, match="Install a JS runtime"):
+        asyncio.run(youtube_module.ingest_youtube("https://example.com/video"))
+
+
+def test_youtube_base_options_enable_node_runtime():
+    opts = youtube_module._youtube_base_options()
+    assert opts["js_runtime"] == "node"
+    assert opts["js_runtimes"]["node"] == "node"
