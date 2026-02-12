@@ -34,6 +34,7 @@ def test_send_email_reminder_uses_smtp(monkeypatch):
             sent["called"] = True
             assert message["Subject"] == "Subject"
 
+    monkeypatch.setattr(notifications.settings, "enable_email_reminders", True)
     monkeypatch.setattr(notifications.settings, "smtp_host", "smtp.example.com")
     monkeypatch.setattr(notifications.settings, "smtp_port", 587)
     monkeypatch.setattr(notifications.settings, "smtp_username", "user")

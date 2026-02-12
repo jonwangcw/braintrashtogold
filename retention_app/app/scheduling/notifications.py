@@ -6,6 +6,8 @@ from app.config import settings
 
 
 def send_email_reminder(subject: str, body: str) -> None:
+    if not settings.enable_email_reminders:
+        return
     if not settings.smtp_host or not settings.email_to or not settings.email_from:
         return
 

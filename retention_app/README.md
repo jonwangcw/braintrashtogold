@@ -9,7 +9,7 @@ This project is a local education retention app built with FastAPI + SQLite. It 
 ```bash
 pip install -e .
 ```
-2. Copy `.env.example` to `.env` and fill in values.
+2. Copy `.env.example` to `.env` and fill in values (`OPENROUTER_API_KEY` required; local Whisper uses `WHISPER_MODEL`).
 3. Run the app:
 
 ```bash
@@ -38,3 +38,6 @@ pytest
 If `yt-dlp` prints a warning about missing JS runtime support (for example, `No supported JavaScript runtime could be found`), install a JS runtime such as **Node.js** or **Deno** and retry.
 
 On some environments, YouTube extraction may fail without this runtime, and the app will set content status to `error` with the underlying message.
+
+
+- Email reminders are disabled by default. Set `ENABLE_EMAIL_REMINDERS=true` and SMTP variables to enable them.

@@ -24,6 +24,7 @@ dependencies = [
   "aiosmtplib>=3.0",
   "plyer>=2.1",
   "python-multipart>=0.0.9",
+  "openai-whisper>=20231117",
 ]
 
 [project.optional-dependencies]

@@ -47,13 +47,15 @@ class ReminderScheduler:
         subject = reminder_subject(content.title)
         body = reminder_body(content.title, url)
 
-        email_notification = models.Notification(
-            content_id=content.id,
-            kind=models.NotificationKind.email,
-            scheduled_for=now,
-            status=models.NotificationStatus.pending,
-        )
-        session.add(email_notification)
+        email_notification: models.Notification | None = None
+        if settings.enable_email_reminders:
+            email_notification = models.Notification(
+                content_id=content.id,
+                kind=models.NotificationKind.email,
+                scheduled_for=now,
+                status=models.NotificationStatus.pending,
+            )
+            session.add(email_notification)
 
         system_notification = models.Notification(
             content_id=content.id,
@@ -64,14 +66,15 @@ class ReminderScheduler:
         session.add(system_notification)
         session.commit()
 
-        try:
-            send_email_reminder(subject, body)
-            email_notification.status = models.NotificationStatus.sent
-            email_notification.sent_at = datetime.utcnow()
-            email_notification.error = None
-        except Exception as exc:  # noqa: BLE001
-            email_notification.status = models.NotificationStatus.failed
-            email_notification.error = str(exc)
+        if email_notification is not None:
+            try:
+                send_email_reminder(subject, body)
+                email_notification.status = models.NotificationStatus.sent
+                email_notification.sent_at = datetime.utcnow()
+                email_notification.error = None
+            except Exception as exc:  # noqa: BLE001
+                email_notification.status = models.NotificationStatus.failed
+                email_notification.error = str(exc)
 
         try:
             system_notify(subject, body)
@@ -82,6 +85,7 @@ class ReminderScheduler:
             system_notification.status = models.NotificationStatus.failed
             system_notification.error = str(exc)
 
-        session.add(email_notification)
+        if email_notification is not None:
+            session.add(email_notification)
         session.add(system_notification)
         session.commit()

@@ -8,4 +8,3 @@ if str(PROJECT_ROOT) not in sys.path:
 
 os.environ.setdefault("OPENROUTER_API_KEY", "test-openrouter-key")
 os.environ.setdefault("OPENROUTER_MODEL", "openai/gpt-4o-mini")
-os.environ.setdefault("OPENAI_API_KEY", "test-openai-key")

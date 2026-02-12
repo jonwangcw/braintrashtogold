@@ -7,8 +7,10 @@ class Settings(BaseSettings):
 
     openrouter_api_key: str = Field(default="", alias="OPENROUTER_API_KEY")
     openrouter_model: str = Field(default="openai/gpt-4o-mini", alias="OPENROUTER_MODEL")
-    openai_api_key: str = Field(default="", alias="OPENAI_API_KEY")
 
+    whisper_model: str = Field(default="base", alias="WHISPER_MODEL")
+
+    enable_email_reminders: bool = Field(default=False, alias="ENABLE_EMAIL_REMINDERS")
     smtp_host: str | None = Field(default=None, alias="SMTP_HOST")
     smtp_port: int | None = Field(default=None, alias="SMTP_PORT")
     smtp_username: str | None = Field(default=None, alias="SMTP_USERNAME")

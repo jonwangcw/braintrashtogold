@@ -13,12 +13,13 @@ MAX_DURATION_SECONDS = 3600
 def _youtube_base_options() -> dict:
     return {
         "quiet": True,
+        "no_warnings": True,
         "noplaylist": True,
         # Force yt-dlp to use Node.js when JavaScript runtime execution is required.
         "js_runtimes": {"node": {"path": "node"}},
         "js_runtime": "node",
         # Prefer clients that typically avoid heavier JS-only extraction paths.
-        "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+        "extractor_args": {"youtube": {"player_client": ["web"]}},
     }
 
 
