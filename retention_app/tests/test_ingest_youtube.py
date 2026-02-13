@@ -1,9 +1,9 @@
 import asyncio
 
 import pytest
-from yt_dlp.utils import DownloadError
 
-pytest.importorskip("yt_dlp")
+yt_dlp = pytest.importorskip("yt_dlp")
+DownloadError = yt_dlp.utils.DownloadError
 
 from app.ingest import youtube as youtube_module
 
@@ -44,3 +44,13 @@ def test_youtube_base_options_enable_node_runtime():
     opts = youtube_module._youtube_base_options()
     assert opts["js_runtime"] == "node"
     assert opts["js_runtimes"]["node"]["path"] == "node"
+
+
+def test_youtube_audio_download_options_are_unambiguous_and_convert_to_mp3(tmp_path):
+    opts = youtube_module._youtube_audio_download_options(str(tmp_path))
+
+    assert opts["format"] == "bestaudio"
+    assert opts["prefer_ffmpeg"] is True
+    assert opts["outtmpl"].endswith("audio.%(ext)s")
+    assert opts["postprocessors"][0]["key"] == "FFmpegExtractAudio"
+    assert opts["postprocessors"][0]["preferredcodec"] == "mp3"

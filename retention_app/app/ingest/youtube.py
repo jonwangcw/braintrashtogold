@@ -18,8 +18,25 @@ def _youtube_base_options() -> dict:
         # Force yt-dlp to use Node.js when JavaScript runtime execution is required.
         "js_runtimes": {"node": {"path": "node"}},
         "js_runtime": "node",
-        # Prefer clients that typically avoid heavier JS-only extraction paths.
-        "extractor_args": {"youtube": {"player_client": ["web"]}},
+    }
+
+
+def _youtube_audio_download_options(output_dir: str) -> dict:
+    outtmpl = str(Path(output_dir) / "audio.%(ext)s")
+    return {
+        **_youtube_base_options(),
+        # Ask yt-dlp for the best available audio-only stream and avoid
+        # ambiguous fallback chains that can fail with unavailable format IDs.
+        "format": "bestaudio",
+        "outtmpl": outtmpl,
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
+        "prefer_ffmpeg": True,
     }
 
 
@@ -31,18 +48,14 @@ def get_youtube_duration_seconds(url: str) -> int:
 
 
 def download_youtube_audio(url: str, output_dir: str) -> str:
-    outtmpl = str(Path(output_dir) / "audio.%(ext)s")
-    opts = {
-        **_youtube_base_options(),
-        "format": "bestaudio/best",
-        "outtmpl": outtmpl,
-    }
+    opts = _youtube_audio_download_options(output_dir)
     with YoutubeDL(opts) as ydl:
         info = ydl.extract_info(url, download=True)
-        downloaded_path = Path(ydl.prepare_filename(info))
+        _ = ydl.prepare_filename(info)
 
-    if downloaded_path.exists():
-        return str(downloaded_path)
+    converted_path = Path(output_dir) / "audio.mp3"
+    if converted_path.exists():
+        return str(converted_path)
 
     matching = sorted(Path(output_dir).glob("audio.*"))
     if not matching:
