@@ -6,6 +6,8 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from app.db.engine import Base, SessionLocal, engine
 from app.db import models
@@ -89,15 +91,33 @@ async def ingest(source_type: str = Form(...), url: str = Form(...), title: str 
 
 @app.get("/quiz/{content_id}/scheduled", response_class=HTMLResponse)
 async def scheduled_quiz(request: Request, content_id: int):
+    with SessionLocal() as session:
+        question_set = session.execute(
+            select(models.QuestionSet)
+            .where(
+                models.QuestionSet.content_id == content_id,
+                models.QuestionSet.kind == models.QuestionSetKind.scheduled,
+            )
+            .order_by(models.QuestionSet.generated_at.desc())
+            .options(selectinload(models.QuestionSet.questions))
+        ).scalars().first()
+
+    questions = [] if question_set is None else sorted(question_set.questions, key=lambda q: q.question_index)
     return templates.TemplateResponse(
-        "quiz.html", {"request": request, "content_id": content_id, "kind": "scheduled"}
+        "quiz.html",
+        {
+            "request": request,
+            "content_id": content_id,
+            "kind": "scheduled",
+            "questions": questions,
+        },
     )
 
 
 @app.get("/quiz/{content_id}/practice", response_class=HTMLResponse)
 async def practice_quiz(request: Request, content_id: int):
     return templates.TemplateResponse(
-        "quiz.html", {"request": request, "content_id": content_id, "kind": "practice"}
+        "quiz.html", {"request": request, "content_id": content_id, "kind": "practice", "questions": []}
     )
 
 

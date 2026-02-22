@@ -19,6 +19,12 @@ async def create_question_set(
     )
     generated = await generate_questions(cleaned_text, str(content_id))
     print(f"[DEBUG] create_question_set:generated questions_count={len(generated.questions)}")
+    for index, question in enumerate(generated.questions, start=1):
+        preview = question.prompt.replace("\n", " ")[:200]
+        print(
+            f"[DEBUG] create_question_set:question[{index}] "
+            f"type={question.question_type} prompt={preview}"
+        )
 
     question_set = models.QuestionSet(
         content_id=content_id,
