@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <a href="/">← Back</a>
+    <h1>{{ kind|title }} Quiz</h1>
+    {% if questions %}
+      <ol class="list">
+        {% for question in questions %}
+          <li>
+            <strong>{{ question.question_type|title }}:</strong>
+            {{ question.prompt }}
+          </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p>Quiz questions will appear here once generated.</p>
+    {% endif %}
+    <form method="post" action="/quiz/0/submit">
+      <button type="submit">Submit (placeholder)</button>
+    </form>
+  </main>
+</body>
+</html>
