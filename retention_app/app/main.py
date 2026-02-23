@@ -70,7 +70,11 @@ def index(request: Request):
 @app.get("/content/{content_id}", response_class=HTMLResponse)
 def content_detail(request: Request, content_id: int):
     with SessionLocal() as session:
-        content = session.get(models.Content, content_id)
+        content = session.execute(
+            select(models.Content)
+            .where(models.Content.id == content_id)
+            .options(selectinload(models.Content.text))
+        ).scalars().first()
     return templates.TemplateResponse(
         "content_detail.html", {"request": request, "content": content}
     )

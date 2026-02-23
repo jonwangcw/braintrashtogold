@@ -15,7 +15,7 @@ def test_ingest_router_cleans_webpage_text(monkeypatch):
 
     cleaned = asyncio.run(router.ingest_source("webpage", "https://example.com"))
 
-    assert cleaned == "Hello world"
+    assert cleaned.cleaned_text == "Hello world"
 
 
 def test_ingest_router_rejects_youtube_url_for_webpage_source(monkeypatch):
