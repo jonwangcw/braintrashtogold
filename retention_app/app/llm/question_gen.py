@@ -41,9 +41,13 @@ def _extract_json_payload(raw_response: str) -> dict:
     )
 
 
-async def generate_questions(cleaned_text: str, content_id: str) -> QuestionSetOutput:
+async def generate_questions(
+    cleaned_text: str,
+    content_id: str,
+    correction_hints: str | None = None,
+) -> QuestionSetOutput:
     client = OpenRouterClient()
-    prompt = question_generation_prompt(cleaned_text)
+    prompt = question_generation_prompt(cleaned_text, correction_hints=correction_hints)
     response = await client.complete(prompt)
     payload = _extract_json_payload(response)
     question_set = QuestionSetOutput.model_validate(payload)

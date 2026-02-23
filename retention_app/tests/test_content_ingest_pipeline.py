@@ -6,6 +6,7 @@ pytest.importorskip("sqlalchemy")
 
 from app.db.engine import Base, engine, SessionLocal
 from app.db import models
+from app.ingest.router import IngestedContentPayload
 from app.services import content_service
 
 
@@ -19,11 +20,17 @@ def reset_db():
 def test_ingest_pipeline_accesses_source_produces_clean_text_and_calls_llm(monkeypatch):
     calls = {"source_url": None, "llm_text": None}
 
-    async def fake_ingest_source(source_type: str, url: str) -> str:
+    async def fake_ingest_source(source_type: str, url: str, artifacts_dir: str | None = None) -> IngestedContentPayload:
         calls["source_url"] = url
-        return "Raw   text\n\nfrom source"
+        return IngestedContentPayload(
+            cleaned_text="Raw   text\n\nfrom source",
+            raw_transcript="raw",
+            corrected_transcript="corrected",
+            ocr_text_corpus="ocr",
+            correction_annotations="termx -> TermX (confidence=0.91)",
+        )
 
-    async def fake_create_question_set(session, content_id, cleaned_text, kind):
+    async def fake_create_question_set(session, content_id, cleaned_text, kind, correction_hints=None):
         calls["llm_text"] = cleaned_text
         return None
 
@@ -44,11 +51,13 @@ def test_ingest_pipeline_accesses_source_produces_clean_text_and_calls_llm(monke
     assert calls["source_url"] == "https://example.com/article"
     assert stored is not None
     assert stored.cleaned_text == "Raw   text\n\nfrom source"
+    assert stored.raw_transcript == "raw"
+    assert stored.corrected_transcript == "corrected"
     assert calls["llm_text"] == "Raw   text\n\nfrom source"
 
 
 def test_ingest_pipeline_marks_error_when_source_access_fails(monkeypatch):
-    async def failing_ingest_source(source_type: str, url: str) -> str:
+    async def failing_ingest_source(source_type: str, url: str, artifacts_dir: str | None = None) -> IngestedContentPayload:
         raise RuntimeError("source unreachable")
 
     monkeypatch.setattr(content_service, "ingest_source", failing_ingest_source)
