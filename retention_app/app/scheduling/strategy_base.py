@@ -7,13 +7,12 @@ class ScheduleDecision:
     next_due_at: datetime | None
     next_step_index: int
     terminate: bool
-    reset_questions: bool
 
 
 def next_state(
     step_index: int,
     last_completed_at: datetime,
-    last_score: float,
+    comfort_level: int,
     scheduled_attempt_count: int,
 ) -> ScheduleDecision:
     raise NotImplementedError
