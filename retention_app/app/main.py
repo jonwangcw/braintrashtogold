@@ -1,7 +1,5 @@
 import asyncio
 import sys
-from datetime import datetime
-
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -12,6 +10,7 @@ from sqlalchemy.orm import selectinload
 from app.db.engine import Base, SessionLocal, engine
 from app.db import models
 from app.services.content_service import ingest_content
+from app.services.quiz_service import complete_quiz_attempt, create_quiz_attempt
 
 
 Base.metadata.create_all(bind=engine)
@@ -105,6 +104,7 @@ async def scheduled_quiz(request: Request, content_id: int):
             .order_by(models.QuestionSet.generated_at.desc())
             .options(selectinload(models.QuestionSet.questions))
         ).scalars().first()
+        attempt = create_quiz_attempt(session, content_id, models.QuizAttemptKind.scheduled)
 
     questions = [] if question_set is None else sorted(question_set.questions, key=lambda q: q.question_index)
     return templates.TemplateResponse(
@@ -114,20 +114,36 @@ async def scheduled_quiz(request: Request, content_id: int):
             "content_id": content_id,
             "kind": "scheduled",
             "questions": questions,
+            "quiz_attempt_id": attempt.id,
         },
     )
 
 
 @app.get("/quiz/{content_id}/practice", response_class=HTMLResponse)
 async def practice_quiz(request: Request, content_id: int):
+    with SessionLocal() as session:
+        attempt = create_quiz_attempt(session, content_id, models.QuizAttemptKind.practice)
     return templates.TemplateResponse(
-        "quiz.html", {"request": request, "content_id": content_id, "kind": "practice", "questions": []}
+        "quiz.html",
+        {"request": request, "content_id": content_id, "kind": "practice", "questions": [], "quiz_attempt_id": attempt.id},
     )
 
 
-@app.post("/quiz/{quiz_attempt_id}/submit", response_class=HTMLResponse)
-async def submit_quiz(request: Request, quiz_attempt_id: int):
+@app.post("/quiz/{quiz_attempt_id}/complete", response_class=HTMLResponse)
+async def complete_quiz(
+    request: Request,
+    quiz_attempt_id: int,
+    comfort_rating: int | None = Form(default=None),
+):
+    with SessionLocal() as session:
+        attempt = complete_quiz_attempt(session, quiz_attempt_id, comfort_rating=comfort_rating)
+
     return templates.TemplateResponse(
         "results.html",
-        {"request": request, "quiz_attempt_id": quiz_attempt_id, "submitted_at": datetime.utcnow()},
+        {
+            "request": request,
+            "quiz_attempt_id": quiz_attempt_id,
+            "submitted_at": attempt.submitted_at,
+            "comfort_rating": comfort_rating if attempt.kind == models.QuizAttemptKind.scheduled else None,
+        },
     )
