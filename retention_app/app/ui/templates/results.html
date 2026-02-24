@@ -10,6 +10,7 @@
     <a href="/">← Back</a>
     <h1>Results</h1>
     <p>Quiz attempt {{ quiz_attempt_id }} submitted at {{ submitted_at }}.</p>
+      {% if comfort_rating is not none %}<p>Comfort rating: {{ comfort_rating }}</p>{% endif %}
   </main>
 </body>
 </html>

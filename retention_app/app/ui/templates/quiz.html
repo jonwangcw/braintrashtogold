@@ -21,8 +21,12 @@
     {% else %}
       <p>Quiz questions will appear here once generated.</p>
     {% endif %}
-    <form method="post" action="/quiz/0/submit">
-      <button type="submit">Submit (placeholder)</button>
+    <form method="post" action="/quiz/{{ quiz_attempt_id }}/complete">
+      {% if kind == "scheduled" %}
+      <label for="comfort_rating">Comfort (1-5)</label>
+      <input id="comfort_rating" name="comfort_rating" type="number" min="1" max="5" required />
+      {% endif %}
+      <button type="submit">Complete quiz</button>
     </form>
   </main>
 </body>

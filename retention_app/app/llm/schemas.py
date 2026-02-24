@@ -32,14 +32,3 @@ class QuestionSetOutput(BaseModel):
         if len(recall) != 5 or len(explain) != 5:
             raise ValueError("question set must contain 5 recall and 5 explain questions")
         return value
-
-
-class GradedAnswer(BaseModel):
-    question_id: str
-    score: Literal[0, 0.5, 1]
-    feedback: str
-
-
-class GradingOutput(BaseModel):
-    quiz_attempt_id: str
-    results: list[GradedAnswer]
