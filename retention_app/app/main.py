@@ -120,6 +120,7 @@ async def scheduled_quiz(request: Request, content_id: int):
             "kind": "scheduled",
             "questions": questions,
             "quiz_attempt_id": attempt.id,
+            "show_comfort_control": True,
         },
     )
 
@@ -130,7 +131,7 @@ async def practice_quiz(request: Request, content_id: int):
         attempt = create_quiz_attempt(session, content_id, models.QuizAttemptKind.practice)
     return templates.TemplateResponse(
         "quiz.html",
-        {"request": request, "content_id": content_id, "kind": "practice", "questions": [], "quiz_attempt_id": attempt.id},
+        {"request": request, "content_id": content_id, "kind": "practice", "questions": [], "quiz_attempt_id": attempt.id, "show_comfort_control": False},
     )
 
 
