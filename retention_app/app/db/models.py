@@ -119,6 +119,8 @@ class QuizAttempt(Base):
     started_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     submitted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     total_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    comfort_rating: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    scheduled_attempt_index: Mapped[int | None] = mapped_column(Integer, nullable=True)
     grader_model: Mapped[str | None] = mapped_column(String(100), nullable=True)
     grading_prompt_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
 

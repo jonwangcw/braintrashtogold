@@ -9,6 +9,10 @@ from app.llm.question_gen import generate_questions, generation_prompt_version
 from app.scheduling import strategy_v1
 
 
+def get_quiz_attempt(session: Session, quiz_attempt_id: int) -> models.QuizAttempt | None:
+    return session.get(models.QuizAttempt, quiz_attempt_id)
+
+
 def get_latest_question_set(
     session: Session,
     content_id: int,
@@ -59,6 +63,92 @@ def create_quiz_attempt(
     return attempt
 
 
+def _completed_scheduled_attempt_count(session: Session, content_id: int, exclude_attempt_id: int | None = None) -> int:
+    conditions = [
+        models.QuizAttempt.content_id == content_id,
+        models.QuizAttempt.kind == models.QuizAttemptKind.scheduled,
+        models.QuizAttempt.submitted_at.is_not(None),
+    ]
+    if exclude_attempt_id is not None:
+        conditions.append(models.QuizAttempt.id != exclude_attempt_id)
+
+    return session.execute(select(func.count(models.QuizAttempt.id)).where(*conditions)).scalar_one()
+
+
+def complete_practice_quiz_attempt(
+    session: Session,
+    quiz_attempt_id: int,
+) -> models.QuizAttempt:
+    attempt = session.get(models.QuizAttempt, quiz_attempt_id)
+    if attempt is None:
+        raise ValueError("quiz attempt not found")
+    if attempt.kind != models.QuizAttemptKind.practice:
+        raise ValueError("attempt is not a practice quiz")
+
+    # Guardrail: repeat submissions must be idempotent.
+    if attempt.submitted_at is not None:
+        return attempt
+
+    attempt.submitted_at = datetime.utcnow()
+    session.add(attempt)
+    session.commit()
+    session.refresh(attempt)
+    return attempt
+
+
+def complete_scheduled_quiz_attempt(
+    session: Session,
+    quiz_attempt_id: int,
+    comfort_rating: int,
+) -> models.QuizAttempt:
+    attempt = session.get(models.QuizAttempt, quiz_attempt_id)
+    if attempt is None:
+        raise ValueError("quiz attempt not found")
+    if attempt.kind != models.QuizAttemptKind.scheduled:
+        raise ValueError("attempt is not a scheduled quiz")
+
+    if comfort_rating < 1 or comfort_rating > 5:
+        raise ValueError("comfort_rating must be between 1 and 5")
+
+    # Guardrail: prevent duplicate schedule progression if already submitted.
+    if attempt.submitted_at is not None:
+        return attempt
+
+    submitted_at = datetime.utcnow()
+    scaled_score = float(comfort_rating * 2)
+
+    attempt.submitted_at = submitted_at
+    attempt.comfort_rating = comfort_rating
+    attempt.total_score = scaled_score
+
+    prior_completed_count = _completed_scheduled_attempt_count(
+        session,
+        attempt.content_id,
+        exclude_attempt_id=attempt.id,
+    )
+    attempt.scheduled_attempt_index = prior_completed_count + 1
+
+    state = session.get(models.ScheduleState, attempt.content_id)
+    if state is not None and not state.is_terminated:
+        decision = strategy_v1.next_state(
+            step_index=state.step_index,
+            last_completed_at=submitted_at,
+            last_score=scaled_score,
+            scheduled_attempt_count=prior_completed_count,
+        )
+        state.step_index = decision.next_step_index
+        state.next_due_at = decision.next_due_at
+        state.last_scheduled_quiz_at = submitted_at
+        state.last_score = scaled_score
+        state.is_terminated = decision.terminate
+        session.add(state)
+
+    session.add(attempt)
+    session.commit()
+    session.refresh(attempt)
+    return attempt
+
+
 def complete_quiz_attempt(
     session: Session,
     quiz_attempt_id: int,
@@ -68,44 +158,12 @@ def complete_quiz_attempt(
     if attempt is None:
         raise ValueError("quiz attempt not found")
 
-    attempt.submitted_at = datetime.utcnow()
-
     if attempt.kind == models.QuizAttemptKind.scheduled:
         if comfort_rating is None:
             raise ValueError("comfort_rating is required for scheduled quizzes")
-        if comfort_rating < 1 or comfort_rating > 5:
-            raise ValueError("comfort_rating must be between 1 and 5")
+        return complete_scheduled_quiz_attempt(session, quiz_attempt_id, comfort_rating)
 
-        scaled_score = float(comfort_rating * 2)
-        attempt.total_score = scaled_score
-
-        state = session.get(models.ScheduleState, attempt.content_id)
-        if state is not None and not state.is_terminated:
-            scheduled_attempt_count = session.execute(
-                select(func.count(models.QuizAttempt.id)).where(
-                    models.QuizAttempt.content_id == attempt.content_id,
-                    models.QuizAttempt.kind == models.QuizAttemptKind.scheduled,
-                    models.QuizAttempt.submitted_at.is_not(None),
-                    models.QuizAttempt.id != attempt.id,
-                )
-            ).scalar_one()
-            decision = strategy_v1.next_state(
-                step_index=state.step_index,
-                last_completed_at=attempt.submitted_at,
-                last_score=scaled_score,
-                scheduled_attempt_count=scheduled_attempt_count,
-            )
-            state.step_index = decision.next_step_index
-            state.next_due_at = decision.next_due_at
-            state.last_scheduled_quiz_at = attempt.submitted_at
-            state.last_score = scaled_score
-            state.is_terminated = decision.terminate
-            session.add(state)
-
-    session.add(attempt)
-    session.commit()
-    session.refresh(attempt)
-    return attempt
+    return complete_practice_quiz_attempt(session, quiz_attempt_id)
 
 
 async def create_question_set(
