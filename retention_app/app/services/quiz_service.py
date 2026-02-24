@@ -92,7 +92,7 @@ def complete_quiz_attempt(
             decision = strategy_v1.next_state(
                 step_index=state.step_index,
                 last_completed_at=attempt.submitted_at,
-                last_score=scaled_score,
+                comfort_level=comfort_rating,
                 scheduled_attempt_count=scheduled_attempt_count,
             )
             state.step_index = decision.next_step_index
