@@ -18,6 +18,20 @@ uvicorn app.main:app --reload
 
 Visit `http://localhost:8000`.
 
+
+## One-click launchers
+
+For easier local startup, use the included launcher files in the `retention_app/` folder:
+
+- **macOS/Linux:** double-click `Run_Retention_App.command` (or run `./Run_Retention_App.command`)
+- **Windows:** double-click `Run_Retention_App.bat`
+
+Both launchers will:
+1. Create `.venv` if missing
+2. Install/update dependencies
+3. Create `.env` from `.env.example` if needed
+4. Start the app on `http://127.0.0.1:8000`
+
 ## Development notes
 
 - SQLite database file is created as `app.db` in the project root.

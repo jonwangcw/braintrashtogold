@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
-from app.db.engine import Base, SessionLocal, engine
+from app.db.engine import Base, SessionLocal, engine, ensure_schema_compatibility
 from app.db import models
 from app.services.content_service import ingest_content
 from app.services.quiz_service import (
@@ -19,6 +19,7 @@ from app.services.quiz_service import (
 
 
 Base.metadata.create_all(bind=engine)
+ensure_schema_compatibility()
 
 def configure_windows_event_loop_policy() -> None:
     if sys.platform == "win32":
