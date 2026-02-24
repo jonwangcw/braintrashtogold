@@ -10,7 +10,12 @@ from sqlalchemy.orm import selectinload
 from app.db.engine import Base, SessionLocal, engine
 from app.db import models
 from app.services.content_service import ingest_content
-from app.services.quiz_service import complete_quiz_attempt, create_quiz_attempt
+from app.services.quiz_service import (
+    complete_practice_quiz_attempt,
+    complete_scheduled_quiz_attempt,
+    create_quiz_attempt,
+    get_quiz_attempt,
+)
 
 
 Base.metadata.create_all(bind=engine)
@@ -136,7 +141,16 @@ async def complete_quiz(
     comfort_rating: int | None = Form(default=None),
 ):
     with SessionLocal() as session:
-        attempt = complete_quiz_attempt(session, quiz_attempt_id, comfort_rating=comfort_rating)
+        existing_attempt = get_quiz_attempt(session, quiz_attempt_id)
+        if existing_attempt is None:
+            return RedirectResponse(url="/", status_code=303)
+
+        if existing_attempt.kind == models.QuizAttemptKind.scheduled:
+            if comfort_rating is None:
+                raise ValueError("comfort_rating is required for scheduled quizzes")
+            attempt = complete_scheduled_quiz_attempt(session, quiz_attempt_id, comfort_rating=comfort_rating)
+        else:
+            attempt = complete_practice_quiz_attempt(session, quiz_attempt_id)
 
     return templates.TemplateResponse(
         "results.html",
@@ -144,6 +158,6 @@ async def complete_quiz(
             "request": request,
             "quiz_attempt_id": quiz_attempt_id,
             "submitted_at": attempt.submitted_at,
-            "comfort_rating": comfort_rating if attempt.kind == models.QuizAttemptKind.scheduled else None,
+            "comfort_rating": attempt.comfort_rating if attempt.kind == models.QuizAttemptKind.scheduled else None,
         },
     )
