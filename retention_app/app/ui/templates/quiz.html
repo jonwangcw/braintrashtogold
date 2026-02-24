@@ -10,20 +10,58 @@
     <a href="/">← Back</a>
     <h1>{{ kind|title }} Quiz</h1>
     {% if questions %}
-      <ol class="list">
+      <ol class="quiz-question-list">
         {% for question in questions %}
-          <li>
-            <strong>{{ question.question_type|title }}:</strong>
-            {{ question.prompt }}
+          <li class="quiz-question-item">
+            <p class="quiz-question-prompt">
+              <strong>{{ question.question_type|title }}:</strong>
+              {{ question.prompt }}
+            </p>
+            <button
+              type="button"
+              class="answer-toggle"
+              data-answer-target="answer-{{ question.id }}"
+              aria-expanded="false"
+            >
+              Reveal answer
+            </button>
+            <div id="answer-{{ question.id }}" class="answer-panel" hidden>
+              <p><strong>Expected answer:</strong></p>
+              <p>{{ question.expected_answer }}</p>
+            </div>
           </li>
         {% endfor %}
       </ol>
     {% else %}
       <p>Quiz questions will appear here once generated.</p>
     {% endif %}
-    <form method="post" action="/quiz/0/submit">
-      <button type="submit">Submit (placeholder)</button>
+    <form method="post" action="/quiz/{{ quiz_attempt_id }}/complete">
+      {% if show_comfort_control %}
+      <label for="comfort_rating">Comfort (1-5)</label>
+      <input id="comfort_rating" name="comfort_rating" type="number" min="1" max="5" required />
+      {% endif %}
+      <button type="submit">Complete quiz</button>
     </form>
   </main>
+  <script>
+    document.querySelectorAll(".answer-toggle").forEach((button) => {
+      button.addEventListener("click", () => {
+        const panelId = button.dataset.answerTarget;
+        const panel = panelId ? document.getElementById(panelId) : null;
+        if (!panel) return;
+
+        const isHidden = panel.hasAttribute("hidden");
+        if (isHidden) {
+          panel.removeAttribute("hidden");
+          button.textContent = "Hide answer";
+          button.setAttribute("aria-expanded", "true");
+        } else {
+          panel.setAttribute("hidden", "");
+          button.textContent = "Reveal answer";
+          button.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+  </script>
 </body>
 </html>
