@@ -62,3 +62,24 @@ def test_scheduled_quiz_displays_generated_questions():
 
     assert response.status_code == 200
     assert "What is retention?" in response.text
+    assert "Reveal answer" in response.text
+    assert "Expected answer:" in response.text
+    assert "name=\"comfort_rating\"" in response.text
+
+
+def test_practice_quiz_hides_comfort_control():
+    with SessionLocal() as session:
+        content = models.Content(
+            title="Example",
+            content_type=models.ContentType.webpage,
+            source_url="https://example.com",
+            status=models.ContentStatus.ready,
+        )
+        session.add(content)
+        session.commit()
+
+    client = TestClient(app)
+    response = client.get(f"/quiz/{content.id}/practice")
+
+    assert response.status_code == 200
+    assert "name=\"comfort_rating\"" not in response.text
