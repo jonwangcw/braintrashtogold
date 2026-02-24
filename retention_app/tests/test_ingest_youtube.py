@@ -25,7 +25,9 @@ def test_youtube_ingest_downloads_and_transcribes(monkeypatch):
     monkeypatch.setattr(youtube_module, "transcribe_audio", fake_transcribe)
 
     result = asyncio.run(youtube_module.ingest_youtube("https://example.com/video"))
-    assert result == "transcript"
+    assert result.raw_transcript == "transcript"
+    assert result.corrected_transcript == "transcript"
+    assert result.ocr_snippets == []
 
 
 def test_youtube_ingest_wraps_download_error(monkeypatch):

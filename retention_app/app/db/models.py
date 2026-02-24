@@ -69,6 +69,10 @@ class ContentText(Base):
 
     content_id: Mapped[int] = mapped_column(ForeignKey("contents.id"), primary_key=True)
     cleaned_text: Mapped[str] = mapped_column(Text)
+    raw_transcript: Mapped[str | None] = mapped_column(Text, nullable=True)
+    corrected_transcript: Mapped[str | None] = mapped_column(Text, nullable=True)
+    ocr_text_corpus: Mapped[str | None] = mapped_column(Text, nullable=True)
+    correction_annotations: Mapped[str | None] = mapped_column(Text, nullable=True)
     text_hash: Mapped[str] = mapped_column(String(128))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 

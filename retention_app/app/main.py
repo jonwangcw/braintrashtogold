@@ -9,12 +9,13 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
-from app.db.engine import Base, SessionLocal, engine
+from app.db.engine import Base, SessionLocal, engine, ensure_schema_compatibility
 from app.db import models
 from app.services.content_service import ingest_content
 
 
 Base.metadata.create_all(bind=engine)
+ensure_schema_compatibility()
 
 def configure_windows_event_loop_policy() -> None:
     if sys.platform == "win32":
@@ -70,7 +71,11 @@ def index(request: Request):
 @app.get("/content/{content_id}", response_class=HTMLResponse)
 def content_detail(request: Request, content_id: int):
     with SessionLocal() as session:
-        content = session.get(models.Content, content_id)
+        content = session.execute(
+            select(models.Content)
+            .where(models.Content.id == content_id)
+            .options(selectinload(models.Content.text))
+        ).scalars().first()
     return templates.TemplateResponse(
         "content_detail.html", {"request": request, "content": content}
     )
