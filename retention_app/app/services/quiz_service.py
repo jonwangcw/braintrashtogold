@@ -12,12 +12,13 @@ async def create_question_set(
     session: Session,
     content_id: int,
     cleaned_text: str,
+    correction_hints: str | None = None,
     kind: models.QuestionSetKind = models.QuestionSetKind.scheduled,
 ) -> models.QuestionSet:
     print(
         f"[DEBUG] create_question_set:start content_id={content_id} kind={kind} cleaned_text_len={len(cleaned_text)}"
     )
-    generated = await generate_questions(cleaned_text, str(content_id))
+    generated = await generate_questions(cleaned_text, str(content_id), correction_hints=correction_hints)
     print(f"[DEBUG] create_question_set:generated questions_count={len(generated.questions)}")
     for index, question in enumerate(generated.questions, start=1):
         preview = question.prompt.replace("\n", " ")[:200]

@@ -17,6 +17,12 @@
         <a class="button" href="/quiz/{{ content.id }}/scheduled">Scheduled quiz</a>
         <a class="button" href="/quiz/{{ content.id }}/practice">Practice quiz</a>
       </div>
+      {% if content.text and content.text.correction_annotations %}
+        <section>
+          <h2>Review corrections</h2>
+          <pre>{{ content.text.correction_annotations }}</pre>
+        </section>
+      {% endif %}
     {% else %}
       <p>Content not found.</p>
     {% endif %}
