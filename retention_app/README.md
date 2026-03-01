@@ -18,6 +18,8 @@ uvicorn app.main:app --reload
 
 Visit `http://localhost:8000`.
 
+In the ingest form, you can either paste a URL (auto-detected source type) or upload a local text-based PDF file.
+
 
 ## One-click launchers
 
