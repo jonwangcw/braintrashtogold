@@ -1,6 +1,9 @@
 import asyncio
 import sys
-from fastapi import FastAPI, Form, Request
+from pathlib import Path
+import tempfile
+
+from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -86,12 +89,45 @@ def content_detail(request: Request, content_id: int):
 
 
 @app.post("/ingest")
-async def ingest(source_type: str = Form(...), url: str = Form(...), title: str = Form("")):
+async def ingest(
+    url: str = Form(""),
+    title: str = Form(""),
+    pdf_file: UploadFile | None = File(default=None),
+):
+    if pdf_file and pdf_file.filename:
+        suffix = Path(pdf_file.filename).suffix or ".pdf"
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
+            temp_file.write(await pdf_file.read())
+            temp_path = temp_file.name
+
+        try:
+            source_label = f"local://{pdf_file.filename}"
+            if not title:
+                title = pdf_file.filename
+            print(f"[DEBUG] /ingest called local_pdf={source_label} title={title}")
+            with SessionLocal() as session:
+                result = await ingest_content(
+                    session,
+                    title,
+                    source=temp_path,
+                    source_url=source_label,
+                    source_type="pdf",
+                )
+                print(
+                    f"[DEBUG] /ingest completed content_id={result.id} status={result.status} error={result.error_message}"
+                )
+        finally:
+            Path(temp_path).unlink(missing_ok=True)
+        return RedirectResponse(url="/", status_code=303)
+
+    if not url:
+        raise ValueError("URL is required when no PDF file is uploaded")
+
     if not title:
         title = url
-    print(f"[DEBUG] /ingest called source_type={source_type} url={url} title={title}")
+    print(f"[DEBUG] /ingest called url={url} title={title}")
     with SessionLocal() as session:
-        result = await ingest_content(session, title, source_type, url)
+        result = await ingest_content(session, title, source=url)
         print(
             f"[DEBUG] /ingest completed content_id={result.id} status={result.status} error={result.error_message}"
         )

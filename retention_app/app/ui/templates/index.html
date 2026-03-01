@@ -10,22 +10,19 @@
     <h1>Retention App</h1>
     <section class="card">
       <h2>Ingest Content</h2>
-      <form method="post" action="/ingest">
+      <form method="post" action="/ingest" enctype="multipart/form-data">
         <label>
           Title
           <input type="text" name="title" placeholder="Optional title" />
         </label>
         <label>
-          Source type
-          <select name="source_type">
-            <option value="webpage">Webpage</option>
-            <option value="pdf">PDF</option>
-            <option value="youtube">YouTube</option>
-          </select>
-        </label>
-        <label>
           URL
-          <input type="url" name="url" required />
+          <input type="url" name="url" placeholder="https://..." />
+        </label>
+        <p class="muted">OR upload a local text-based PDF file.</p>
+        <label>
+          PDF file
+          <input type="file" name="pdf_file" accept="application/pdf,.pdf" />
         </label>
         <button type="submit">Ingest</button>
       </form>

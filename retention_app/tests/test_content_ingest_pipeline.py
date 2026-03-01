@@ -20,10 +20,11 @@ def reset_db():
 def test_ingest_pipeline_accesses_source_produces_clean_text_and_calls_llm(monkeypatch):
     calls = {"source_url": None, "llm_text": None}
 
-    async def fake_ingest_source(source_type: str, url: str, artifacts_dir: str | None = None) -> IngestedContentPayload:
+    async def fake_ingest_source(source_type: str | None, url: str, artifacts_dir: str | None = None) -> IngestedContentPayload:
         calls["source_url"] = url
         return IngestedContentPayload(
             cleaned_text="Raw   text\n\nfrom source",
+            source_type="webpage",
             raw_transcript="raw",
             corrected_transcript="corrected",
             ocr_text_corpus="ocr",
@@ -42,13 +43,13 @@ def test_ingest_pipeline_accesses_source_produces_clean_text_and_calls_llm(monke
             content_service.ingest_content(
                 session=session,
                 title="Example",
-                source_type="webpage",
-                url="https://example.com/article",
+                source="https://example.com/article",
             )
         )
         stored = session.get(models.ContentText, content.id)
 
     assert calls["source_url"] == "https://example.com/article"
+    assert content.content_type == models.ContentType.webpage
     assert stored is not None
     assert stored.cleaned_text == "Raw   text\n\nfrom source"
     assert stored.raw_transcript == "raw"
@@ -57,7 +58,7 @@ def test_ingest_pipeline_accesses_source_produces_clean_text_and_calls_llm(monke
 
 
 def test_ingest_pipeline_marks_error_when_source_access_fails(monkeypatch):
-    async def failing_ingest_source(source_type: str, url: str, artifacts_dir: str | None = None) -> IngestedContentPayload:
+    async def failing_ingest_source(source_type: str | None, url: str, artifacts_dir: str | None = None) -> IngestedContentPayload:
         raise RuntimeError("source unreachable")
 
     monkeypatch.setattr(content_service, "ingest_source", failing_ingest_source)
@@ -67,8 +68,7 @@ def test_ingest_pipeline_marks_error_when_source_access_fails(monkeypatch):
             content_service.ingest_content(
                 session=session,
                 title="Broken",
-                source_type="webpage",
-                url="https://example.com/broken",
+                source="https://example.com/broken",
             )
         )
         session.refresh(content)

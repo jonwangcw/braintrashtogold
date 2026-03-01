@@ -14,17 +14,21 @@ from app.services.quiz_service import create_question_set
 async def ingest_content(
     session: Session,
     title: str,
-    source_type: str,
-    url: str,
+    source: str,
+    source_url: str | None = None,
+    source_type: str | None = None,
 ) -> models.Content:
-    print(f"[DEBUG] ingest_content:start title={title} source_type={source_type} url={url}")
-    content = crud.create_content(session, title, models.ContentType(source_type), url)
+    if source_url is None:
+        source_url = source
+    print(f"[DEBUG] ingest_content:start title={title} source_url={source_url}")
+    content = crud.create_content(session, title, models.ContentType.webpage, source_url)
     content_id = content.id
     print(f"[DEBUG] ingest_content:created content_id={content_id} status={content.status}")
     try:
         print("[DEBUG] ingest_content:calling ingest_source")
         artifacts_dir = Path("artifacts") / f"content_{content_id}"
-        payload = await ingest_source(source_type, url, artifacts_dir=str(artifacts_dir))
+        payload = await ingest_source(source_type, source, artifacts_dir=str(artifacts_dir))
+        content.content_type = models.ContentType(payload.source_type)
         cleaned_text = payload.cleaned_text
         print(f"[DEBUG] ingest_content:ingest_source complete cleaned_text_len={len(cleaned_text)}")
         text_hash = hashlib.sha256(cleaned_text.encode("utf-8")).hexdigest()

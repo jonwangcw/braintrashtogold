@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 from app.db import models
 from app.db.engine import Base, SessionLocal, engine
 from app.main import app
+from app import main as main_module
 
 
 @pytest.fixture(autouse=True)
@@ -83,3 +84,46 @@ def test_practice_quiz_hides_comfort_control():
 
     assert response.status_code == 200
     assert "name=\"comfort_rating\"" not in response.text
+
+
+def test_homepage_ingest_form_uses_auto_detection():
+    client = TestClient(app)
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert 'name="source_type"' not in response.text
+    assert 'name="url"' in response.text
+    assert 'name="pdf_file"' in response.text
+
+
+def test_ingest_local_pdf_upload(monkeypatch):
+    captured = {}
+
+    async def fake_ingest_content(session, title, source, source_url=None, source_type=None):
+        captured["title"] = title
+        captured["source"] = source
+        captured["source_url"] = source_url
+        captured["source_type"] = source_type
+
+        class _Result:
+            id = 1
+            status = models.ContentStatus.ready
+            error_message = None
+
+        return _Result()
+
+    monkeypatch.setattr(main_module, "ingest_content", fake_ingest_content)
+
+    client = TestClient(app)
+    response = client.post(
+        "/ingest",
+        data={"title": "Local PDF"},
+        files={"pdf_file": ("notes.pdf", b"%PDF-1.4 fake", "application/pdf")},
+        follow_redirects=False,
+    )
+
+    assert response.status_code == 303
+    assert captured["title"] == "Local PDF"
+    assert captured["source_url"] == "local://notes.pdf"
+    assert captured["source_type"] == "pdf"
+    assert captured["source"].endswith(".pdf")
