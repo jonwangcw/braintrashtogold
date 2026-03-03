@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Concept Probe</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <a href="/concept-review/due">← Back to due reviews</a>
+    {% if content and concept %}
+      <h1>{{ content.title }}</h1>
+      <h2>Probe: {{ concept.concept_name }}</h2>
+      <p>{{ concept.prompt }}</p>
+      <form method="post" action="/concept-review/submit">
+        <input type="hidden" name="content_id" value="{{ content.id }}" />
+        <input type="hidden" name="concept_id" value="{{ concept.concept_id }}" />
+        <input type="hidden" name="probe_id" value="{{ concept.concept_id }}" />
+
+        <label for="comfort_level">Self comfort (0-3)</label>
+        <input id="comfort_level" name="comfort_level" type="number" min="0" max="3" required />
+
+        <button type="submit">Submit comfort</button>
+      </form>
+
+      {% if request.query_params.get('submitted') == '1' %}
+        <p class="status">Saved comfort {{ request.query_params.get('comfort_level') }} for probe {{ request.query_params.get('probe_id') }}.</p>
+      {% endif %}
+    {% else %}
+      <p>Concept probe not found.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
