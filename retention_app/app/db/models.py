@@ -35,6 +35,18 @@ class QuizAttemptKind(str, enum.Enum):
     practice = "practice"
 
 
+
+
+class ProbeStatus(str, enum.Enum):
+    active = "active"
+    superseded = "superseded"
+
+
+class ReviewRating(str, enum.Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
+
 class NotificationKind(str, enum.Enum):
     email = "email"
     system = "system"
@@ -152,6 +164,53 @@ class ScheduleState(Base):
     is_terminated: Mapped[bool] = mapped_column(Boolean, default=False)
 
     content: Mapped[Content] = relationship("Content", back_populates="schedule_state")
+
+
+
+
+class Concept(Base):
+    __tablename__ = "concepts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    content_id: Mapped[int] = mapped_column(ForeignKey("contents.id"))
+    title: Mapped[str] = mapped_column(String(255))
+    summary: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class ConceptProbe(Base):
+    __tablename__ = "concept_probes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"))
+    prompt: Mapped[str] = mapped_column(Text)
+    expected_answer: Mapped[str | None] = mapped_column(Text, nullable=True)
+    status: Mapped[ProbeStatus] = mapped_column(String(20), default=ProbeStatus.active)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class ConceptSchedule(Base):
+    __tablename__ = "concept_schedule"
+
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), primary_key=True)
+    step_index: Mapped[int] = mapped_column(Integer, default=0)
+    next_due_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    last_reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    last_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    is_terminated: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class ReviewEvent(Base):
+    __tablename__ = "review_events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"))
+    probe_id: Mapped[int] = mapped_column(ForeignKey("concept_probes.id"))
+    self_comfort: Mapped[int] = mapped_column(Integer)
+    correctness: Mapped[float | None] = mapped_column(Float, nullable=True)
+    response_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    score: Mapped[float] = mapped_column(Float)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
 class Notification(Base):

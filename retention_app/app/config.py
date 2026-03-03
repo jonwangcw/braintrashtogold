@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     enable_system_notifications: bool = Field(default=False, alias="ENABLE_SYSTEM_NOTIFICATIONS")
     app_base_url: str = Field(default="http://localhost:8000", alias="APP_BASE_URL")
     timezone: str = Field(default="UTC", alias="TIMEZONE")
+    enable_legacy_quizzes: bool = Field(default=True, alias="ENABLE_LEGACY_QUIZZES")
 
 
 settings = Settings()

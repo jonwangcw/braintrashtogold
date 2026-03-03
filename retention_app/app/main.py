@@ -3,21 +3,28 @@ import sys
 from pathlib import Path
 import tempfile
 
-from fastapi import FastAPI, File, Form, Request, UploadFile
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.db.engine import Base, SessionLocal, engine, ensure_schema_compatibility
 from app.db import models
+from app.config import settings
 from app.services.content_service import ingest_content
 from app.services.quiz_service import (
     complete_practice_quiz_attempt,
     complete_scheduled_quiz_attempt,
     create_quiz_attempt,
     get_quiz_attempt,
+)
+from app.services.review_service import (
+    fetch_due_concepts,
+    generate_or_reuse_probe,
+    submit_concept_review,
 )
 
 
@@ -62,6 +69,14 @@ def install_asyncio_exception_filter() -> None:
 install_asyncio_exception_filter()
 
 app = FastAPI()
+
+def _ensure_legacy_quiz_enabled() -> None:
+    if not settings.enable_legacy_quizzes:
+        raise HTTPException(
+            status_code=410,
+            detail="Legacy content-level quizzes are deprecated. Use /reviews/* and /concepts/* endpoints.",
+        )
+
 app.mount("/static", StaticFiles(directory="app/ui/static"), name="static")
 
 
@@ -134,8 +149,119 @@ async def ingest(
     return RedirectResponse(url="/", status_code=303)
 
 
+
+
+@app.get("/concepts")
+def list_concepts(limit: int = 100):
+    with SessionLocal() as session:
+        concepts = session.execute(select(models.Concept).order_by(models.Concept.created_at.desc()).limit(limit)).scalars().all()
+    return [
+        {
+            "id": concept.id,
+            "content_id": concept.content_id,
+            "title": concept.title,
+            "summary": concept.summary,
+            "created_at": concept.created_at,
+        }
+        for concept in concepts
+    ]
+
+
+@app.get("/concepts/{concept_id}")
+def get_concept(concept_id: int):
+    with SessionLocal() as session:
+        concept = session.get(models.Concept, concept_id)
+        if concept is None:
+            raise HTTPException(status_code=404, detail="Concept not found")
+
+        schedule = session.get(models.ConceptSchedule, concept_id)
+        probe = generate_or_reuse_probe(session, concept_id)
+
+    return {
+        "id": concept.id,
+        "content_id": concept.content_id,
+        "title": concept.title,
+        "summary": concept.summary,
+        "schedule": None
+        if schedule is None
+        else {
+            "step_index": schedule.step_index,
+            "next_due_at": schedule.next_due_at,
+            "is_terminated": schedule.is_terminated,
+            "last_score": schedule.last_score,
+        },
+        "probe": {
+            "id": probe.id,
+            "prompt": probe.prompt,
+            "expected_answer": probe.expected_answer,
+            "status": probe.status,
+        },
+    }
+
+
+@app.get("/reviews/due")
+def due_reviews(limit: int = 20):
+    with SessionLocal() as session:
+        concepts = fetch_due_concepts(session, limit=limit)
+        payload = []
+        for concept in concepts:
+            probe = generate_or_reuse_probe(session, concept.id)
+            schedule = session.get(models.ConceptSchedule, concept.id)
+            payload.append(
+                {
+                    "concept_id": concept.id,
+                    "title": concept.title,
+                    "probe": {
+                        "probe_id": probe.id,
+                        "prompt": probe.prompt,
+                        "expected_answer": probe.expected_answer,
+                    },
+                    "next_due_at": schedule.next_due_at if schedule else None,
+                    "step_index": schedule.step_index if schedule else None,
+                }
+            )
+    return payload
+
+
+class ReviewSubmitPayload(BaseModel):
+    concept_id: int
+    probe_id: int
+    self_comfort: int
+    correctness: float | None = None
+    response_text: str | None = None
+
+
+@app.post("/reviews/submit")
+def submit_review(payload: ReviewSubmitPayload):
+    with SessionLocal() as session:
+        try:
+            event, schedule = submit_concept_review(
+                session,
+                concept_id=payload.concept_id,
+                probe_id=payload.probe_id,
+                self_comfort=payload.self_comfort,
+                correctness=payload.correctness,
+                response_text=payload.response_text,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return JSONResponse(
+        {
+            "review_event_id": event.id,
+            "concept_id": event.concept_id,
+            "probe_id": event.probe_id,
+            "score": event.score,
+            "next_due_at": schedule.next_due_at.isoformat() if schedule.next_due_at else None,
+            "step_index": schedule.step_index,
+            "is_terminated": schedule.is_terminated,
+        }
+    )
+
+
 @app.get("/quiz/{content_id}/scheduled", response_class=HTMLResponse)
 async def scheduled_quiz(request: Request, content_id: int):
+    _ensure_legacy_quiz_enabled()
     with SessionLocal() as session:
         question_set = session.execute(
             select(models.QuestionSet)
@@ -164,6 +290,7 @@ async def scheduled_quiz(request: Request, content_id: int):
 
 @app.get("/quiz/{content_id}/practice", response_class=HTMLResponse)
 async def practice_quiz(request: Request, content_id: int):
+    _ensure_legacy_quiz_enabled()
     with SessionLocal() as session:
         attempt = create_quiz_attempt(session, content_id, models.QuizAttemptKind.practice)
     return templates.TemplateResponse(
@@ -178,6 +305,7 @@ async def complete_quiz(
     quiz_attempt_id: int,
     comfort_rating: int | None = Form(default=None),
 ):
+    _ensure_legacy_quiz_enabled()
     with SessionLocal() as session:
         existing_attempt = get_quiz_attempt(session, quiz_attempt_id)
         if existing_attempt is None:

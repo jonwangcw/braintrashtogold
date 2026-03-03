@@ -40,3 +40,17 @@ def next_state(
         terminate=False,
         reset_questions=False,
     )
+
+
+def next_concept_state(
+    step_index: int,
+    last_completed_at: datetime,
+    last_score: float,
+    review_count: int,
+) -> ScheduleDecision:
+    return next_state(
+        step_index=step_index,
+        last_completed_at=last_completed_at,
+        last_score=last_score,
+        scheduled_attempt_count=review_count,
+    )
