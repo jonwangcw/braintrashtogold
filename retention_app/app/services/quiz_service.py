@@ -182,7 +182,7 @@ async def create_question_set(
         preview = question.prompt.replace("\n", " ")[:200]
         print(
             f"[DEBUG] create_question_set:question[{index}] "
-            f"type={question.question_type} prompt={preview}"
+            f"type={question.bloom_level.value} prompt={preview}"
         )
 
     question_set = models.QuestionSet(
@@ -199,7 +199,7 @@ async def create_question_set(
             models.Question(
                 question_set_id=question_set.id,
                 question_index=index,
-                question_type=question.question_type,
+                question_type=question.bloom_level.value,
                 prompt=question.prompt,
                 expected_answer=question.expected_answer,
                 key_points_json=json.dumps(question.key_points),
