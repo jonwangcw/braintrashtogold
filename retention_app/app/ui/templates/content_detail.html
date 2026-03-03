@@ -16,7 +16,42 @@
       <div class="actions">
         <a class="button" href="/quiz/{{ content.id }}/scheduled">Scheduled quiz</a>
         <a class="button" href="/quiz/{{ content.id }}/practice">Practice quiz</a>
+        <a class="button" href="/concept-review/due">Due concept reviews</a>
+        {% if concepts %}
+          <a class="button" href="/concept-review/{{ content.id }}/{{ concepts[0].concept_id }}">Open first concept probe</a>
+        {% endif %}
       </div>
+      
+      <section>
+        <h2>Concept detail</h2>
+        {% if concepts %}
+          <ul class="list">
+            {% for concept in concepts %}
+              <li>
+                <h3>{{ concept.concept_name }}</h3>
+                <p><strong>Type:</strong> {{ concept.question_type }}</p>
+                {% if concept.sources %}
+                  <p><strong>Evidence across media:</strong></p>
+                  <ul>
+                    {% for source in concept.sources %}
+                      <li>{{ source.quote }} ({{ source.start_char }}-{{ source.end_char }})</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No concept probes generated yet.</p>
+        {% endif %}
+
+        {% if content.schedule_state %}
+          <h3>Schedule status</h3>
+          <p>Step index: {{ content.schedule_state.step_index }}</p>
+          <p>Next due at: {{ content.schedule_state.next_due_at }}</p>
+          <p>Terminated: {{ content.schedule_state.is_terminated }}</p>
+        {% endif %}
+      </section>
       {% if content.text and content.text.correction_annotations %}
         <section>
           <h2>Review corrections</h2>

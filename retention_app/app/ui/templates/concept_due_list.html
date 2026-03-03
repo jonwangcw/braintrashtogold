@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Due Concept Reviews</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <a href="/">← Back</a>
+    <h1>Due concept reviews</h1>
+    {% if due_items %}
+      <ul class="list">
+        {% for item in due_items %}
+          <li>
+            <strong>{{ item.content.title }}</strong>
+            <span class="status">Due: {{ item.content.schedule_state.next_due_at }}</span>
+            <span>{{ item.concept_count }} probes available</span>
+            {% if item.first_concept_id %}
+              <a class="button" href="/concept-review/{{ item.content.id }}/{{ item.first_concept_id }}">Start review</a>
+            {% endif %}
+            <a class="button" href="/content/{{ item.content.id }}">Concept detail</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No concept reviews are currently due.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
