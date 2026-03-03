@@ -42,3 +42,114 @@ def init_schedule_state(session: Session, content_id: int, next_due_at: datetime
     session.commit()
     session.refresh(state)
     return state
+
+
+def get_concept_schedule(
+    session: Session, user_id: int, concept_id: int
+) -> models.ConceptSchedule | None:
+    return (
+        session.query(models.ConceptSchedule)
+        .filter(
+            models.ConceptSchedule.user_id == user_id,
+            models.ConceptSchedule.concept_id == concept_id,
+        )
+        .first()
+    )
+
+
+def create_or_update_concept_schedule(
+    session: Session,
+    *,
+    user_id: int,
+    concept_id: int,
+    due_at: datetime,
+    ease_factor: float = 2.5,
+    interval_days: int = 0,
+    lapses: int = 0,
+    repetitions: int = 0,
+    bloom_stage: models.BloomLevel = models.BloomLevel.knowledge,
+    last_reviewed_at: datetime | None = None,
+) -> models.ConceptSchedule:
+    schedule = get_concept_schedule(session, user_id=user_id, concept_id=concept_id)
+    if schedule is None:
+        schedule = models.ConceptSchedule(
+            user_id=user_id,
+            concept_id=concept_id,
+            due_at=due_at,
+            ease_factor=ease_factor,
+            interval_days=interval_days,
+            lapses=lapses,
+            repetitions=repetitions,
+            bloom_stage=bloom_stage,
+            last_reviewed_at=last_reviewed_at,
+        )
+    else:
+        schedule.due_at = due_at
+        schedule.ease_factor = ease_factor
+        schedule.interval_days = interval_days
+        schedule.lapses = lapses
+        schedule.repetitions = repetitions
+        schedule.bloom_stage = bloom_stage
+        schedule.last_reviewed_at = last_reviewed_at
+
+    session.add(schedule)
+    session.commit()
+    session.refresh(schedule)
+    return schedule
+
+
+def update_concept_schedule(
+    session: Session,
+    schedule: models.ConceptSchedule,
+    *,
+    due_at: datetime | None = None,
+    ease_factor: float | None = None,
+    interval_days: int | None = None,
+    lapses: int | None = None,
+    repetitions: int | None = None,
+    bloom_stage: models.BloomLevel | None = None,
+    last_reviewed_at: datetime | None = None,
+) -> models.ConceptSchedule:
+    if due_at is not None:
+        schedule.due_at = due_at
+    if ease_factor is not None:
+        schedule.ease_factor = ease_factor
+    if interval_days is not None:
+        schedule.interval_days = interval_days
+    if lapses is not None:
+        schedule.lapses = lapses
+    if repetitions is not None:
+        schedule.repetitions = repetitions
+    if bloom_stage is not None:
+        schedule.bloom_stage = bloom_stage
+    if last_reviewed_at is not None:
+        schedule.last_reviewed_at = last_reviewed_at
+
+    session.add(schedule)
+    session.commit()
+    session.refresh(schedule)
+    return schedule
+
+
+def log_review_event(
+    session: Session,
+    *,
+    user_id: int,
+    concept_id: int,
+    self_comfort: int,
+    question_probe_id: int | None = None,
+    is_correct: bool | None = None,
+    created_at: datetime | None = None,
+) -> models.ReviewEvent:
+    event = models.ReviewEvent(
+        user_id=user_id,
+        concept_id=concept_id,
+        question_probe_id=question_probe_id,
+        self_comfort=self_comfort,
+        is_correct=is_correct,
+        created_at=created_at or datetime.utcnow(),
+    )
+    session.add(event)
+    session.commit()
+    session.refresh(event)
+    return event

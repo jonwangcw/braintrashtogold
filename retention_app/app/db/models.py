@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .engine import Base
@@ -35,8 +35,6 @@ class QuizAttemptKind(str, enum.Enum):
     practice = "practice"
 
 
-
-
 class ProbeStatus(str, enum.Enum):
     active = "active"
     superseded = "superseded"
@@ -47,6 +45,7 @@ class ReviewRating(str, enum.Enum):
     medium = "medium"
     high = "high"
 
+
 class NotificationKind(str, enum.Enum):
     email = "email"
     system = "system"
@@ -56,6 +55,15 @@ class NotificationStatus(str, enum.Enum):
     pending = "pending"
     sent = "sent"
     failed = "failed"
+
+
+class BloomLevel(str, enum.Enum):
+    knowledge = "Knowledge"
+    comprehension = "Comprehension"
+    application = "Application"
+    analysis = "Analysis"
+    synthesis = "Synthesis"
+    evaluation = "Evaluation"
 
 
 class Content(Base):
@@ -168,53 +176,6 @@ class ScheduleState(Base):
     content: Mapped[Content] = relationship("Content", back_populates="schedule_state")
 
 
-
-
-class Concept(Base):
-    __tablename__ = "concepts"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    content_id: Mapped[int] = mapped_column(ForeignKey("contents.id"))
-    title: Mapped[str] = mapped_column(String(255))
-    summary: Mapped[str] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-
-
-class ConceptProbe(Base):
-    __tablename__ = "concept_probes"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"))
-    prompt: Mapped[str] = mapped_column(Text)
-    expected_answer: Mapped[str | None] = mapped_column(Text, nullable=True)
-    status: Mapped[ProbeStatus] = mapped_column(String(20), default=ProbeStatus.active)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-
-
-class ConceptSchedule(Base):
-    __tablename__ = "concept_schedule"
-
-    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), primary_key=True)
-    step_index: Mapped[int] = mapped_column(Integer, default=0)
-    next_due_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-    last_reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-    last_score: Mapped[float | None] = mapped_column(Float, nullable=True)
-    is_terminated: Mapped[bool] = mapped_column(Boolean, default=False)
-
-
-class ReviewEvent(Base):
-    __tablename__ = "review_events"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"))
-    probe_id: Mapped[int] = mapped_column(ForeignKey("concept_probes.id"))
-    self_comfort: Mapped[int] = mapped_column(Integer)
-    correctness: Mapped[float | None] = mapped_column(Float, nullable=True)
-    response_text: Mapped[str | None] = mapped_column(Text, nullable=True)
-    score: Mapped[float] = mapped_column(Float)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-
-
 class Notification(Base):
     __tablename__ = "notifications"
 
@@ -244,16 +205,52 @@ class ContentSegment(Base):
 
 class Concept(Base):
     __tablename__ = "concepts"
+    __table_args__ = (UniqueConstraint("user_id", "canonical_name", name="uq_concepts_user_canonical"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    content_id: Mapped[int | None] = mapped_column(ForeignKey("contents.id"), nullable=True)
+    user_id: Mapped[int] = mapped_column(Integer, default=0, index=True)
+    title: Mapped[str | None] = mapped_column(String(255), nullable=True)
     canonical_name: Mapped[str] = mapped_column(String(255), index=True)
-    aliases_json: Mapped[str] = mapped_column(Text, default="[]")
     summary: Mapped[str] = mapped_column(Text)
+    difficulty: Mapped[float] = mapped_column(Float, default=0.0)
+    aliases_json: Mapped[str] = mapped_column(Text, default="[]")
+    embedding_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     evidence_links: Mapped[list["ConceptEvidence"]] = relationship("ConceptEvidence", back_populates="concept")
     schedule: Mapped["ConceptSchedule"] = relationship("ConceptSchedule", back_populates="concept", uselist=False)
+    probes: Mapped[list["QuestionProbe"]] = relationship("QuestionProbe", back_populates="concept")
+    review_events: Mapped[list["ReviewEvent"]] = relationship("ReviewEvent", back_populates="concept")
+
+
+class ConceptProbe(Base):
+    __tablename__ = "concept_probes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), index=True)
+    prompt: Mapped[str] = mapped_column(Text)
+    expected_answer: Mapped[str | None] = mapped_column(Text, nullable=True)
+    status: Mapped[ProbeStatus] = mapped_column(String(20), default=ProbeStatus.active)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class QuestionProbe(Base):
+    __tablename__ = "question_probes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), index=True)
+    bloom_level: Mapped[BloomLevel] = mapped_column(String(32), default=BloomLevel.knowledge)
+    prompt: Mapped[str] = mapped_column(Text)
+    expected_answer: Mapped[str | None] = mapped_column(Text, nullable=True)
+    generation_model: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    generation_prompt_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    generation_metadata_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    concept: Mapped[Concept] = relationship("Concept", back_populates="probes")
+    review_events: Mapped[list["ReviewEvent"]] = relationship("ReviewEvent", back_populates="question_probe")
 
 
 class ConceptEvidence(Base):
@@ -262,16 +259,20 @@ class ConceptEvidence(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), index=True)
     content_id: Mapped[int] = mapped_column(ForeignKey("contents.id"), index=True)
-    content_segment_id: Mapped[int] = mapped_column(ForeignKey("content_segments.id"), index=True)
-    quote: Mapped[str] = mapped_column(Text)
-    start_char: Mapped[int] = mapped_column(Integer)
-    end_char: Mapped[int] = mapped_column(Integer)
+    content_segment_id: Mapped[int | None] = mapped_column(ForeignKey("content_segments.id"), index=True, nullable=True)
+    quote: Mapped[str | None] = mapped_column(Text, nullable=True)
+    start_char: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    end_char: Mapped[int | None] = mapped_column(Integer, nullable=True)
     confidence: Mapped[float] = mapped_column(Float, default=1.0)
+    span_start: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    span_end: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    excerpt: Mapped[str | None] = mapped_column(Text, nullable=True)
+    support_strength: Mapped[float] = mapped_column(Float, default=0.0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     concept: Mapped[Concept] = relationship("Concept", back_populates="evidence_links")
     content: Mapped[Content] = relationship("Content", back_populates="concept_evidence")
-    segment: Mapped[ContentSegment] = relationship("ContentSegment", back_populates="evidence_links")
+    segment: Mapped[ContentSegment | None] = relationship("ContentSegment", back_populates="evidence_links")
 
 
 class ConceptMergeAudit(Base):
@@ -287,12 +288,48 @@ class ConceptMergeAudit(Base):
 
 class ConceptSchedule(Base):
     __tablename__ = "concept_schedule"
+    __table_args__ = (Index("ix_concept_schedule_user_due", "user_id", "due_at"),)
 
     concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, default=0, index=True)
+
+    step_index: Mapped[int] = mapped_column(Integer, default=0)
+    next_due_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    last_reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    last_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    is_terminated: Mapped[bool] = mapped_column(Boolean, default=False)
+
     interval_days: Mapped[int] = mapped_column(Integer, default=1)
-    due_at: Mapped[datetime] = mapped_column(DateTime)
     reinforcement_count: Mapped[int] = mapped_column(Integer, default=0)
+
+    ease_factor: Mapped[float] = mapped_column(Float, default=2.5)
+    due_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, index=True)
+    lapses: Mapped[int] = mapped_column(Integer, default=0)
+    repetitions: Mapped[int] = mapped_column(Integer, default=0)
+    bloom_stage: Mapped[BloomLevel] = mapped_column(String(32), default=BloomLevel.knowledge)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     concept: Mapped[Concept] = relationship("Concept", back_populates="schedule")
+
+
+class ReviewEvent(Base):
+    __tablename__ = "review_events"
+    __table_args__ = (Index("ix_review_events_concept_created", "concept_id", "created_at"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, default=0, index=True)
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), index=True)
+
+    probe_id: Mapped[int | None] = mapped_column(ForeignKey("concept_probes.id"), nullable=True)
+    question_probe_id: Mapped[int | None] = mapped_column(ForeignKey("question_probes.id"), nullable=True)
+
+    self_comfort: Mapped[int] = mapped_column(Integer)
+    correctness: Mapped[float | None] = mapped_column(Float, nullable=True)
+    is_correct: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    response_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    concept: Mapped[Concept] = relationship("Concept", back_populates="review_events")
+    question_probe: Mapped[QuestionProbe | None] = relationship("QuestionProbe", back_populates="review_events")
