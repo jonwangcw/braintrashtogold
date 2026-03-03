@@ -74,6 +74,8 @@ class Content(Base):
     schedule_state: Mapped["ScheduleState"] = relationship(
         "ScheduleState", back_populates="content", uselist=False
     )
+    segments: Mapped[list["ContentSegment"]] = relationship("ContentSegment", back_populates="content")
+    concept_evidence: Mapped[list["ConceptEvidence"]] = relationship("ConceptEvidence", back_populates="content")
 
 
 class ContentText(Base):
@@ -223,3 +225,74 @@ class Notification(Base):
     sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     status: Mapped[NotificationStatus] = mapped_column(String(20), default=NotificationStatus.pending)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class ContentSegment(Base):
+    __tablename__ = "content_segments"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    content_id: Mapped[int] = mapped_column(ForeignKey("contents.id"), index=True)
+    chunk_index: Mapped[int] = mapped_column(Integer)
+    start_char: Mapped[int] = mapped_column(Integer)
+    end_char: Mapped[int] = mapped_column(Integer)
+    text: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    content: Mapped[Content] = relationship("Content", back_populates="segments")
+    evidence_links: Mapped[list["ConceptEvidence"]] = relationship("ConceptEvidence", back_populates="segment")
+
+
+class Concept(Base):
+    __tablename__ = "concepts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    canonical_name: Mapped[str] = mapped_column(String(255), index=True)
+    aliases_json: Mapped[str] = mapped_column(Text, default="[]")
+    summary: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    evidence_links: Mapped[list["ConceptEvidence"]] = relationship("ConceptEvidence", back_populates="concept")
+    schedule: Mapped["ConceptSchedule"] = relationship("ConceptSchedule", back_populates="concept", uselist=False)
+
+
+class ConceptEvidence(Base):
+    __tablename__ = "concept_evidence"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), index=True)
+    content_id: Mapped[int] = mapped_column(ForeignKey("contents.id"), index=True)
+    content_segment_id: Mapped[int] = mapped_column(ForeignKey("content_segments.id"), index=True)
+    quote: Mapped[str] = mapped_column(Text)
+    start_char: Mapped[int] = mapped_column(Integer)
+    end_char: Mapped[int] = mapped_column(Integer)
+    confidence: Mapped[float] = mapped_column(Float, default=1.0)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    concept: Mapped[Concept] = relationship("Concept", back_populates="evidence_links")
+    content: Mapped[Content] = relationship("Content", back_populates="concept_evidence")
+    segment: Mapped[ContentSegment] = relationship("ContentSegment", back_populates="evidence_links")
+
+
+class ConceptMergeAudit(Base):
+    __tablename__ = "concept_merge_audit"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    source_concept_name: Mapped[str] = mapped_column(String(255))
+    target_concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), index=True)
+    similarity_score: Mapped[float] = mapped_column(Float)
+    rationale_json: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class ConceptSchedule(Base):
+    __tablename__ = "concept_schedule"
+
+    concept_id: Mapped[int] = mapped_column(ForeignKey("concepts.id"), primary_key=True)
+    interval_days: Mapped[int] = mapped_column(Integer, default=1)
+    due_at: Mapped[datetime] = mapped_column(DateTime)
+    reinforcement_count: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    concept: Mapped[Concept] = relationship("Concept", back_populates="schedule")
