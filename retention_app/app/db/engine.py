@@ -59,3 +59,11 @@ def ensure_schema_compatibility() -> None:
                 "scheduled_attempt_index": "INTEGER",
             },
         )
+
+        # Compatibility for per-user content ownership.
+        _ensure_table_columns(
+            connection,
+            inspector,
+            "contents",
+            {"user_id": "INTEGER"},
+        )

@@ -66,6 +66,16 @@ class BloomLevel(str, enum.Enum):
     evaluation = "Evaluation"
 
 
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    username: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    contents: Mapped[list["Content"]] = relationship("Content", back_populates="user")
+
+
 class Content(Base):
     __tablename__ = "contents"
 
@@ -73,10 +83,12 @@ class Content(Base):
     title: Mapped[str] = mapped_column(String(255))
     content_type: Mapped[ContentType] = mapped_column(String(50))
     source_url: Mapped[str] = mapped_column(String(1000))
+    user_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     status: Mapped[ContentStatus] = mapped_column(String(20), default=ContentStatus.pending)
     error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
 
+    user: Mapped["User | None"] = relationship("User", back_populates="contents")
     text: Mapped["ContentText"] = relationship("ContentText", back_populates="content", uselist=False)
     question_sets: Mapped[list["QuestionSet"]] = relationship("QuestionSet", back_populates="content")
     schedule_state: Mapped["ScheduleState"] = relationship(

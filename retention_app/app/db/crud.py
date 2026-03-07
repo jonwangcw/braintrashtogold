@@ -5,12 +5,29 @@ from sqlalchemy.orm import Session
 from . import models
 
 
-def create_content(session: Session, title: str, content_type: models.ContentType, source_url: str) -> models.Content:
+def get_or_create_user(session: Session, username: str) -> models.User:
+    user = session.query(models.User).filter(models.User.username == username).first()
+    if user is None:
+        user = models.User(username=username)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+    return user
+
+
+def create_content(
+    session: Session,
+    title: str,
+    content_type: models.ContentType,
+    source_url: str,
+    user_id: int | None = None,
+) -> models.Content:
     content = models.Content(
         title=title,
         content_type=content_type,
         source_url=source_url,
         status=models.ContentStatus.pending,
+        user_id=user_id,
     )
     session.add(content)
     session.commit()

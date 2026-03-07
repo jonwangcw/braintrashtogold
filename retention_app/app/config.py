@@ -2,6 +2,14 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+def _detect_local_timezone() -> str:
+    try:
+        from tzlocal import get_localzone
+        return str(get_localzone())
+    except Exception:
+        return "UTC"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -24,8 +32,10 @@ class Settings(BaseSettings):
 
     enable_system_notifications: bool = Field(default=False, alias="ENABLE_SYSTEM_NOTIFICATIONS")
     app_base_url: str = Field(default="http://localhost:8000", alias="APP_BASE_URL")
-    timezone: str = Field(default="UTC", alias="TIMEZONE")
+    timezone: str = Field(default_factory=_detect_local_timezone, alias="TIMEZONE")
     enable_legacy_quizzes: bool = Field(default=True, alias="ENABLE_LEGACY_QUIZZES")
+    scheduled_bloom_ceiling: str = Field(default="understand", alias="SCHEDULED_BLOOM_CEILING")
+    questions_per_bloom_level: int = Field(default=3, alias="QUESTIONS_PER_BLOOM_LEVEL")
 
 
 settings = Settings()

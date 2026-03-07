@@ -4,6 +4,17 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+import shutil
+
+import pytesseract
+from PIL import Image, ImageOps, ImageStat
+
+# If tesseract isn't on PATH, fall back to the standard Windows install location.
+if shutil.which("tesseract") is None:
+    _windows_default = Path(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
+    if _windows_default.exists():
+        pytesseract.pytesseract.tesseract_cmd = str(_windows_default)
+
 
 @dataclass
 class OCRSnippet:
@@ -23,15 +34,27 @@ def _timestamp_from_frame_name(frame_path: str, default_step_seconds: int = 15) 
     return float(max(frame_number - 1, 0) * default_step_seconds)
 
 
+def _preprocess_for_ocr(image: Image.Image) -> Image.Image:
+    gray = image.convert("L")
+    stat = ImageStat.Stat(gray)
+    if stat.mean[0] < 128:  # predominantly dark → invert so text is dark-on-white
+        gray = ImageOps.invert(gray)
+    return gray
+
+
 def _ocr_single_frame(frame_path: str) -> OCRSnippet | None:
     try:
-        import pytesseract
-        from PIL import Image
+        with Image.open(frame_path) as image:
+            preprocessed = _preprocess_for_ocr(image)
+            data = pytesseract.image_to_data(
+                preprocessed,
+                output_type=pytesseract.Output.DICT,
+                config="--psm 3",
+            )
+    except pytesseract.TesseractNotFoundError:
+        raise  # surface missing binary immediately — do not hide
     except Exception:
-        return None
-
-    with Image.open(frame_path) as image:
-        data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
+        return None  # skip unreadable or corrupt frames
 
     words: list[str] = []
     confidences: list[float] = []

@@ -9,10 +9,17 @@ from yt_dlp.utils import DownloadError
 
 from app.processing.transcribe import transcribe_audio
 from app.processing.ocr import OCRSnippet, ocr_frames
-from app.processing.transcript_reconcile import ReconciledTranscript, reconcile_transcript_with_ocr
+from app.processing.transcript_reconcile import ReconciledTranscript
 
 
 MAX_DURATION_SECONDS = 3600
+
+
+@dataclass
+class _YouTubeMeta:
+    duration_seconds: int
+    title: str | None
+    uploader: str | None
 
 
 @dataclass
@@ -22,6 +29,8 @@ class YouTubeIngestResult:
     ocr_snippets: list[OCRSnippet]
     reconciliation: ReconciledTranscript
     artifact_dir: str | None = None
+    reconciliation_notes: str | None = None
+    title: str | None = None
 
 
 def _youtube_base_options() -> dict:
@@ -54,11 +63,19 @@ def _youtube_audio_download_options(output_dir: str) -> dict:
     }
 
 
-def get_youtube_duration_seconds(url: str) -> int:
+def _get_youtube_metadata(url: str) -> _YouTubeMeta:
     opts = _youtube_base_options()
     with YoutubeDL(opts) as ydl:
         info = ydl.extract_info(url, download=False)
-    return int(info.get("duration") or 0)
+    return _YouTubeMeta(
+        duration_seconds=int(info.get("duration") or 0),
+        title=info.get("title") or None,
+        uploader=info.get("uploader") or info.get("channel") or None,
+    )
+
+
+def get_youtube_duration_seconds(url: str) -> int:
+    return _get_youtube_metadata(url).duration_seconds
 
 
 def download_youtube_audio(url: str, output_dir: str) -> str:
@@ -137,6 +154,32 @@ def download_youtube_video(url: str, output_dir: str) -> str:
     return str(matching[0])
 
 
+async def _llm_reconcile(raw_transcript: str, ocr_snippets: list[OCRSnippet]) -> tuple[str, str]:
+    import json as _json
+    from app.llm.openrouter_client import OpenRouterClient
+    from app.llm.prompts import reconciliation_prompt
+    ocr_corpus = "\n".join(
+        f"[{int(s.timestamp_seconds)}s] {s.text}" for s in ocr_snippets
+    )
+    client = OpenRouterClient()
+    raw = await client.complete(reconciliation_prompt(raw_transcript, ocr_corpus))
+    try:
+        stripped = raw.strip()
+        # Strip optional markdown code fence
+        if stripped.startswith("```"):
+            stripped = stripped.split("```")[1]
+            if stripped.startswith("json"):
+                stripped = stripped[4:]
+        payload = _json.loads(stripped)
+        corrected = str(payload.get("corrected_transcript") or raw_transcript)
+        changes = payload.get("changes") or []
+        notes = "\n".join(str(c) for c in changes) if changes else ""
+    except Exception:
+        corrected = raw
+        notes = ""
+    return corrected, notes
+
+
 def extract_video_frames_for_ocr(
     url: str,
     artifacts_dir: str,
@@ -158,9 +201,13 @@ def extract_video_frames_for_ocr(
 
 async def ingest_youtube(url: str, artifacts_dir: str | None = None) -> YouTubeIngestResult:
     try:
-        duration = get_youtube_duration_seconds(url)
-        if duration > MAX_DURATION_SECONDS:
+        meta = _get_youtube_metadata(url)
+        if meta.duration_seconds > MAX_DURATION_SECONDS:
             raise ValueError("YouTube video exceeds 1 hour limit")
+        if meta.title and meta.uploader:
+            formatted_title = f"{meta.title} - {meta.uploader}"
+        else:
+            formatted_title = meta.title
 
         with TemporaryDirectory() as temp_dir:
             audio_path = download_youtube_audio(url, temp_dir)
@@ -171,13 +218,20 @@ async def ingest_youtube(url: str, artifacts_dir: str | None = None) -> YouTubeI
             frame_paths = extract_video_frames_for_ocr(url, artifacts_dir)
             ocr_snippets = ocr_frames(frame_paths)
 
-        reconciliation = reconcile_transcript_with_ocr(raw_transcript, ocr_snippets)
+        reconciliation_notes: str | None = None
+        if ocr_snippets:
+            corrected_transcript, reconciliation_notes = await _llm_reconcile(raw_transcript, ocr_snippets)
+        else:
+            corrected_transcript = raw_transcript
+        reconciliation = ReconciledTranscript(corrected_transcript=corrected_transcript, corrections=[])
         return YouTubeIngestResult(
             raw_transcript=raw_transcript,
-            corrected_transcript=reconciliation.corrected_transcript,
+            corrected_transcript=corrected_transcript,
             ocr_snippets=ocr_snippets,
             reconciliation=reconciliation,
             artifact_dir=artifacts_dir,
+            reconciliation_notes=reconciliation_notes,
+            title=formatted_title,
         )
     except DownloadError as exc:
         raise ValueError(

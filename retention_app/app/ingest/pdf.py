@@ -1,6 +1,24 @@
 from pypdf import PdfReader
 
 
+def extract_pdf_title(path: str) -> str | None:
+    reader = PdfReader(path)
+    meta = reader.metadata
+    if not meta:
+        return None
+    title = (meta.get("/Title") or "").strip() or None
+    author = (meta.get("/Author") or "").strip() or None
+    if not title:
+        return None
+    if not author:
+        return title
+    # Author field may use "and", ";", or "," as separators
+    parts = [p.strip() for p in author.replace(" and ", ";").split(";") if p.strip()]
+    if len(parts) >= 2:
+        return f"{title} - {parts[0]} et al."
+    return f"{title} - {parts[0]}" if parts else title
+
+
 def is_text_based_pdf(path: str, page_limit: int = 3, min_chars: int = 50) -> bool:
     reader = PdfReader(path)
     sample_text = ""

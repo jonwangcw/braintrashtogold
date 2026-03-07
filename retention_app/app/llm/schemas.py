@@ -54,18 +54,18 @@ class QuestionOutput(BaseModel):
 
 class QuestionSetOutput(BaseModel):
     content_id: str
-    questions: list[QuestionOutput]
+    questions: list[QuestionOutput] = Field(min_length=1)
 
-    @field_validator("questions")
-    @classmethod
-    def validate_question_count(cls, value: list[QuestionOutput]) -> list[QuestionOutput]:
-        if len(value) != 10:
-            raise ValueError("question set must contain exactly 10 questions")
-        remember = [q for q in value if q.bloom_level == BloomLevel.remember]
-        understand = [q for q in value if q.bloom_level == BloomLevel.understand]
-        if len(remember) != 5 or len(understand) != 5:
-            raise ValueError("question set must contain 5 remember and 5 understand questions")
-        return value
+
+class FreeQuestionOutput(BaseModel):
+    bloom_level: BloomLevel
+    prompt: str
+    expected_answer: str
+    key_points: list[str] = Field(min_length=1)
+
+
+class FreeQuestionSetOutput(BaseModel):
+    questions: list[FreeQuestionOutput] = Field(min_length=1)
 
 
 class ConceptEvidenceSpan(BaseModel):

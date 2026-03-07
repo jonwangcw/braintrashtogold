@@ -1,6 +1,7 @@
 import asyncio
 import json
 import sys
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 import tempfile
@@ -14,8 +15,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.db.engine import Base, SessionLocal, engine, ensure_schema_compatibility
-from app.db import models
+from app.db import crud, models
 from app.config import settings
+from app.scheduling.scheduler import ReminderScheduler
 from app.services.content_service import ingest_content
 from app.services.quiz_service import (
     complete_practice_quiz_attempt,
@@ -70,7 +72,38 @@ def install_asyncio_exception_filter() -> None:
 
 install_asyncio_exception_filter()
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    if settings.enable_system_notifications or settings.enable_email_reminders:
+        scheduler = ReminderScheduler(SessionLocal)
+        scheduler.start()
+        try:
+            yield
+        finally:
+            scheduler.shutdown()
+    else:
+        yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+def _get_current_user(request: Request, session) -> models.User | None:
+    username = request.cookies.get("username")
+    if not username:
+        return None
+    return session.query(models.User).filter(models.User.username == username).first()
+
+
+_BLOOM_ORDER = ["remember", "understand", "apply", "analyze", "evaluate", "create"]
+
+
+def _split_questions(questions: list, ceiling: str) -> tuple[list, list]:
+    ceiling_idx = _BLOOM_ORDER.index(ceiling) if ceiling in _BLOOM_ORDER else 1
+    scheduled = [q for q in questions if q.question_type in _BLOOM_ORDER[: ceiling_idx + 1]]
+    optional = [q for q in questions if q.question_type in _BLOOM_ORDER[ceiling_idx + 1 :]]
+    return scheduled, optional
+
 
 def _ensure_legacy_quiz_enabled() -> None:
     if not settings.enable_legacy_quizzes:
@@ -122,16 +155,48 @@ def _build_concepts_for_content(content: models.Content) -> list[dict]:
     return concepts
 
 
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+@app.post("/login")
+def login(username: str = Form(...)):
+    username = username.strip()
+    if not username:
+        raise HTTPException(status_code=400, detail="Username required")
+    with SessionLocal() as session:
+        crud.get_or_create_user(session, username)
+    response = RedirectResponse(url="/", status_code=303)
+    response.set_cookie("username", username, max_age=365 * 24 * 3600, httponly=True)
+    return response
+
+
+@app.get("/logout")
+def logout():
+    response = RedirectResponse(url="/login", status_code=303)
+    response.delete_cookie("username")
+    return response
+
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     with SessionLocal() as session:
-        contents = session.query(models.Content).order_by(models.Content.created_at.desc()).all()
-    return templates.TemplateResponse("index.html", {"request": request, "contents": contents})
+        user = _get_current_user(request, session)
+        if user is None:
+            return RedirectResponse(url="/login", status_code=303)
+        contents = session.query(models.Content).filter(
+            models.Content.user_id == user.id
+        ).order_by(models.Content.created_at.desc()).all()
+    return templates.TemplateResponse("index.html", {"request": request, "contents": contents, "username": user.username})
 
 
 @app.get("/content/{content_id}", response_class=HTMLResponse)
 def content_detail(request: Request, content_id: int):
     with SessionLocal() as session:
+        user = _get_current_user(request, session)
+        if user is None:
+            return RedirectResponse(url="/login", status_code=303)
         content = session.execute(
             select(models.Content)
             .where(models.Content.id == content_id)
@@ -147,10 +212,13 @@ def content_detail(request: Request, content_id: int):
 def due_concept_reviews(request: Request):
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     with SessionLocal() as session:
+        user = _get_current_user(request, session)
+        if user is None:
+            return RedirectResponse(url="/login", status_code=303)
         due_contents = session.execute(
             select(models.Content)
             .join(models.ScheduleState, models.ScheduleState.content_id == models.Content.id)
-            .where(models.ScheduleState.is_terminated.is_(False), models.ScheduleState.next_due_at.is_not(None), models.ScheduleState.next_due_at <= now)
+            .where(models.ScheduleState.is_terminated.is_(False), models.ScheduleState.next_due_at.is_not(None), models.ScheduleState.next_due_at <= now, models.Content.user_id == user.id)
             .options(selectinload(models.Content.schedule_state), selectinload(models.Content.question_sets).selectinload(models.QuestionSet.questions))
             .order_by(models.ScheduleState.next_due_at.asc())
         ).scalars().all()
@@ -169,6 +237,9 @@ def due_concept_reviews(request: Request):
 @app.get("/concept-review/{content_id}/{concept_id}", response_class=HTMLResponse)
 def concept_probe_view(request: Request, content_id: int, concept_id: int):
     with SessionLocal() as session:
+        user = _get_current_user(request, session)
+        if user is None:
+            return RedirectResponse(url="/login", status_code=303)
         content = session.execute(
             select(models.Content)
             .where(models.Content.id == content_id)
@@ -199,10 +270,17 @@ def submit_concept_probe(content_id: int = Form(...), concept_id: int = Form(...
 
 @app.post("/ingest")
 async def ingest(
+    request: Request,
     url: str = Form(""),
     title: str = Form(""),
     pdf_file: UploadFile | None = File(default=None),
 ):
+    with SessionLocal() as _auth_session:
+        user = _get_current_user(request, _auth_session)
+    if user is None:
+        return RedirectResponse(url="/login", status_code=303)
+    user_id = user.id
+
     if pdf_file and pdf_file.filename:
         suffix = Path(pdf_file.filename).suffix or ".pdf"
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
@@ -211,9 +289,7 @@ async def ingest(
 
         try:
             source_label = f"local://{pdf_file.filename}"
-            if not title:
-                title = pdf_file.filename
-            print(f"[DEBUG] /ingest called local_pdf={source_label} title={title}")
+            print(f"[DEBUG] /ingest called local_pdf={source_label} title={title!r}")
             with SessionLocal() as session:
                 result = await ingest_content(
                     session,
@@ -221,6 +297,7 @@ async def ingest(
                     source=temp_path,
                     source_url=source_label,
                     source_type="pdf",
+                    user_id=user_id,
                 )
                 print(
                     f"[DEBUG] /ingest completed content_id={result.id} status={result.status} error={result.error_message}"
@@ -232,11 +309,9 @@ async def ingest(
     if not url:
         raise ValueError("URL is required when no PDF file is uploaded")
 
-    if not title:
-        title = url
-    print(f"[DEBUG] /ingest called url={url} title={title}")
+    print(f"[DEBUG] /ingest called url={url} title={title!r}")
     with SessionLocal() as session:
-        result = await ingest_content(session, title, source=url)
+        result = await ingest_content(session, title, source=url, user_id=user_id)
         print(
             f"[DEBUG] /ingest completed content_id={result.id} status={result.status} error={result.error_message}"
         )
@@ -369,13 +444,15 @@ async def scheduled_quiz(request: Request, content_id: int):
         attempt = create_quiz_attempt(session, content_id, models.QuizAttemptKind.scheduled)
 
     questions = [] if question_set is None else sorted(question_set.questions, key=lambda q: q.question_index)
+    scheduled_qs, optional_qs = _split_questions(questions, settings.scheduled_bloom_ceiling)
     return templates.TemplateResponse(
         "quiz.html",
         {
             "request": request,
             "content_id": content_id,
             "kind": "scheduled",
-            "questions": questions,
+            "scheduled_questions": scheduled_qs,
+            "optional_questions": optional_qs,
             "quiz_attempt_id": attempt.id,
             "show_comfort_control": True,
         },
@@ -389,7 +466,7 @@ async def practice_quiz(request: Request, content_id: int):
         attempt = create_quiz_attempt(session, content_id, models.QuizAttemptKind.practice)
     return templates.TemplateResponse(
         "quiz.html",
-        {"request": request, "content_id": content_id, "kind": "practice", "questions": [], "quiz_attempt_id": attempt.id, "show_comfort_control": False},
+        {"request": request, "content_id": content_id, "kind": "practice", "scheduled_questions": [], "optional_questions": [], "quiz_attempt_id": attempt.id, "show_comfort_control": False},
     )
 
 

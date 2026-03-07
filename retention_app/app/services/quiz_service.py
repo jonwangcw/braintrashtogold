@@ -172,11 +172,12 @@ async def create_question_set(
     cleaned_text: str,
     correction_hints: str | None = None,
     kind: models.QuestionSetKind = models.QuestionSetKind.scheduled,
+    debug_logger=None,
 ) -> models.QuestionSet:
     print(
         f"[DEBUG] create_question_set:start content_id={content_id} kind={kind} cleaned_text_len={len(cleaned_text)}"
     )
-    generated = await generate_questions(cleaned_text, str(content_id), correction_hints=correction_hints)
+    generated = await generate_questions(cleaned_text, str(content_id), correction_hints=correction_hints, debug_logger=debug_logger)
     print(f"[DEBUG] create_question_set:generated questions_count={len(generated.questions)}")
     for index, question in enumerate(generated.questions, start=1):
         preview = question.prompt.replace("\n", " ")[:200]
@@ -203,7 +204,7 @@ async def create_question_set(
                 prompt=question.prompt,
                 expected_answer=question.expected_answer,
                 key_points_json=json.dumps(question.key_points),
-                sources_json=json.dumps([source.model_dump() for source in question.sources]),
+                sources_json="[]",
             )
         )
 

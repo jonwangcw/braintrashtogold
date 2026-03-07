@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy.orm import Session
@@ -13,6 +13,9 @@ from app.scheduling.notifications import (
 )
 
 
+_DEDUP_WINDOW_HOURS = 12
+
+
 class ReminderScheduler:
     def __init__(self, session_factory) -> None:
         self.session_factory = session_factory
@@ -20,21 +23,43 @@ class ReminderScheduler:
 
     def start(self) -> None:
         self.scheduler.add_job(self.check_due_items, "interval", minutes=5)
+        # DEBUG: one-shot job to verify toast delivery; bypasses DB due-items check
+        debug_run_at = datetime.now(tz=timezone.utc) + timedelta(seconds=30)
+        self.scheduler.add_job(self._debug_notify, "date", run_date=debug_run_at, id="debug_notify")
         self.scheduler.start()
+
+    def _debug_notify(self) -> None:
+        print("[DEBUG] _debug_notify: firing test notification")
+        system_notify("Retention App", "Debug: notification system is working")
+        print("[DEBUG] _debug_notify: system_notify returned")
 
     def shutdown(self) -> None:
         self.scheduler.shutdown()
 
     def check_due_items(self) -> None:
         with self.session_factory() as session:
+            now = datetime.utcnow()
+            cutoff = now - timedelta(hours=_DEDUP_WINDOW_HOURS)
             due_items = (
                 session.query(models.ScheduleState)
                 .join(models.Content)
                 .filter(models.ScheduleState.is_terminated.is_(False))
-                .filter(models.ScheduleState.next_due_at <= datetime.utcnow())
+                .filter(models.ScheduleState.next_due_at <= now)
                 .all()
             )
             for state in due_items:
+                recent = (
+                    session.query(models.Notification)
+                    .filter(
+                        models.Notification.content_id == state.content_id,
+                        models.Notification.kind == models.NotificationKind.system,
+                        models.Notification.status == models.NotificationStatus.sent,
+                        models.Notification.sent_at >= cutoff,
+                    )
+                    .first()
+                )
+                if recent:
+                    continue
                 self._send_notifications(session, state)
 
     def _send_notifications(self, session: Session, state: models.ScheduleState) -> None:

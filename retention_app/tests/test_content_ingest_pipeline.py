@@ -31,7 +31,7 @@ def test_ingest_pipeline_accesses_source_produces_clean_text_and_calls_llm(monke
             correction_annotations="termx -> TermX (confidence=0.91)",
         )
 
-    async def fake_create_question_set(session, content_id, cleaned_text, kind, correction_hints=None):
+    async def fake_create_question_set(session, content_id, cleaned_text, kind, correction_hints=None, debug_logger=None):
         calls["llm_text"] = cleaned_text
         return None
 
