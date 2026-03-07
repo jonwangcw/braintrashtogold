@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import sys
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -22,6 +23,7 @@ from app.services.content_service import ingest_content
 from app.services.quiz_service import (
     complete_practice_quiz_attempt,
     complete_scheduled_quiz_attempt,
+    create_question_set,
     create_quiz_attempt,
     get_quiz_attempt,
 )
@@ -31,6 +33,17 @@ from app.services.review_service import (
     submit_concept_review,
 )
 
+
+def _configure_logging() -> None:
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
+        datefmt="%H:%M:%S",
+    )
+
+
+_configure_logging()
+logger = logging.getLogger(__name__)
 
 Base.metadata.create_all(bind=engine)
 ensure_schema_compatibility()
@@ -289,7 +302,7 @@ async def ingest(
 
         try:
             source_label = f"local://{pdf_file.filename}"
-            print(f"[DEBUG] /ingest called local_pdf={source_label} title={title!r}")
+            logger.debug("/ingest called local_pdf=%s title=%r", source_label, title)
             with SessionLocal() as session:
                 result = await ingest_content(
                     session,
@@ -299,9 +312,7 @@ async def ingest(
                     source_type="pdf",
                     user_id=user_id,
                 )
-                print(
-                    f"[DEBUG] /ingest completed content_id={result.id} status={result.status} error={result.error_message}"
-                )
+                logger.debug("/ingest completed content_id=%s status=%s error=%s", result.id, result.status, result.error_message)
         finally:
             Path(temp_path).unlink(missing_ok=True)
         return RedirectResponse(url="/", status_code=303)
@@ -309,12 +320,10 @@ async def ingest(
     if not url:
         raise ValueError("URL is required when no PDF file is uploaded")
 
-    print(f"[DEBUG] /ingest called url={url} title={title!r}")
+    logger.debug("/ingest called url=%s title=%r", url, title)
     with SessionLocal() as session:
         result = await ingest_content(session, title, source=url, user_id=user_id)
-        print(
-            f"[DEBUG] /ingest completed content_id={result.id} status={result.status} error={result.error_message}"
-        )
+        logger.debug("/ingest completed content_id=%s status=%s error=%s", result.id, result.status, result.error_message)
     return RedirectResponse(url="/", status_code=303)
 
 
@@ -486,6 +495,19 @@ async def complete_quiz(
             if comfort_rating is None:
                 raise ValueError("comfort_rating is required for scheduled quizzes")
             attempt = complete_scheduled_quiz_attempt(session, quiz_attempt_id, comfort_rating=comfort_rating)
+            if comfort_rating <= 2:
+                content_text = session.execute(
+                    select(models.ContentText).where(
+                        models.ContentText.content_id == existing_attempt.content_id
+                    )
+                ).scalars().first()
+                if content_text:
+                    await create_question_set(
+                        session=session,
+                        content_id=existing_attempt.content_id,
+                        cleaned_text=content_text.cleaned_text,
+                        kind=models.QuestionSetKind.scheduled,
+                    )
         else:
             attempt = complete_practice_quiz_attempt(session, quiz_attempt_id)
 

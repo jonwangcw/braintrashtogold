@@ -1,6 +1,9 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+import logging
 
 from apscheduler.schedulers.background import BackgroundScheduler
+
+logger = logging.getLogger(__name__)
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -23,15 +26,8 @@ class ReminderScheduler:
 
     def start(self) -> None:
         self.scheduler.add_job(self.check_due_items, "interval", minutes=5)
-        # DEBUG: one-shot job to verify toast delivery; bypasses DB due-items check
-        debug_run_at = datetime.now(tz=timezone.utc) + timedelta(seconds=30)
-        self.scheduler.add_job(self._debug_notify, "date", run_date=debug_run_at, id="debug_notify")
         self.scheduler.start()
-
-    def _debug_notify(self) -> None:
-        print("[DEBUG] _debug_notify: firing test notification")
-        system_notify("Retention App", "Debug: notification system is working")
-        print("[DEBUG] _debug_notify: system_notify returned")
+        logger.info("Scheduler started")
 
     def shutdown(self) -> None:
         self.scheduler.shutdown()

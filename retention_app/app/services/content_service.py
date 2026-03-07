@@ -1,10 +1,12 @@
 from datetime import datetime, timedelta
 import hashlib
 import json
+import logging
 from pathlib import Path
-import traceback
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
+
+logger = logging.getLogger(__name__)
 
 from sqlalchemy.orm import Session
 
@@ -210,21 +212,21 @@ async def ingest_content(
 ) -> models.Content:
     if source_url is None:
         source_url = source
-    print(f"[DEBUG] ingest_content:start title={title} source_url={source_url}")
+    logger.debug("ingest_content: title=%r source_url=%s", title, source_url)
     content = crud.create_content(session, title or source_url, models.ContentType.webpage, source_url, user_id=user_id)
     content_id = content.id
-    print(f"[DEBUG] ingest_content:created content_id={content_id} status={content.status}")
+    logger.debug("ingest_content: created content_id=%s status=%s", content_id, content.status)
     try:
-        print("[DEBUG] ingest_content:calling ingest_source")
+        logger.debug("ingest_content: calling ingest_source")
         artifacts_dir = Path("artifacts") / f"content_{content_id}"
         debug_logger = DebugLogger(content_id, artifacts_dir)
         payload = await ingest_source(source_type, source, artifacts_dir=str(artifacts_dir))
         content.content_type = models.ContentType(payload.source_type)
         if payload.title and not title:
             content.title = payload.title
-            print(f"[DEBUG] ingest_content:auto_title={payload.title!r}")
+            logger.debug("ingest_content: auto_title=%r", payload.title)
         cleaned_text = payload.cleaned_text
-        print(f"[DEBUG] ingest_content:ingest_source complete cleaned_text_len={len(cleaned_text)}")
+        logger.debug("ingest_content: ingest_source complete text_len=%d", len(cleaned_text))
         text_hash = hashlib.sha256(cleaned_text.encode("utf-8")).hexdigest()
 
         debug_logger.section("RAW TRANSCRIPT", payload.raw_transcript or "(none)")
@@ -236,9 +238,10 @@ async def ingest_content(
         if payload.correction_annotations:
             top_corrections = payload.correction_annotations.splitlines()[:5]
         if top_corrections:
-            print(
-                "[OBSERVE] ingest_content:top_transcript_corrections "
-                f"content_id={content_id} corrections={json.dumps(top_corrections)}"
+            logger.info(
+                "ingest_content: transcript corrections content_id=%s corrections=%s",
+                content_id,
+                json.dumps(top_corrections),
             )
 
         content_text = models.ContentText(
@@ -255,7 +258,7 @@ async def ingest_content(
 
         await process_concepts_for_content(session=session, content_id=content_id, cleaned_text=cleaned_text)
 
-        print("[DEBUG] ingest_content:calling create_question_set")
+        logger.debug("ingest_content: calling create_question_set")
         await create_question_set(
             session=session,
             content_id=content_id,
@@ -265,14 +268,13 @@ async def ingest_content(
             debug_logger=debug_logger,
         )
 
-        print("[DEBUG] ingest_content:create_question_set complete")
+        logger.debug("ingest_content: create_question_set complete")
         crud.set_content_ready(session, content)
         crud.init_schedule_state(session, content_id, datetime.utcnow() + timedelta(days=1))
-        print(f"[DEBUG] ingest_content:ready content_id={content_id}")
+        logger.debug("ingest_content: ready content_id=%s", content_id)
     except Exception as exc:  # noqa: BLE001
-        print(f"[DEBUG] ingest_content:exception content_id={content_id} error={exc}")
-        traceback.print_exc()
+        logger.error("ingest_content: failed content_id=%s", content_id, exc_info=True)
         session.rollback()
         crud.set_content_error(session, content, str(exc))
-        print(f"[DEBUG] ingest_content:error persisted content_id={content_id}")
+        logger.debug("ingest_content: error persisted content_id=%s", content_id)
     return content

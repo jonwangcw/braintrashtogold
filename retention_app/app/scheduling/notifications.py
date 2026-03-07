@@ -1,8 +1,11 @@
 from datetime import datetime
 from email.message import EmailMessage
+import logging
 import smtplib
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 def send_email_reminder(subject: str, body: str) -> None:
@@ -34,7 +37,7 @@ def send_email_reminder(subject: str, body: str) -> None:
 def system_notify(title: str, message: str) -> None:
     if not settings.enable_system_notifications:
         return
-    print(f"[DEBUG] system_notify: title={title!r}")
+    logger.debug("system_notify: title=%r", title)
     # plyer's NOTIFYICONDATAW caps szInfoTitle at 64 and szInfo at 256
     plyer_title = title[:63]
     plyer_message = message[:255]
@@ -42,10 +45,10 @@ def system_notify(title: str, message: str) -> None:
         from plyer import notification
 
         notification.notify(title=plyer_title, message=plyer_message, timeout=10)
-        print("[DEBUG] system_notify: plyer succeeded")
+        logger.debug("system_notify: plyer succeeded")
         return
     except Exception as exc:
-        print(f"[DEBUG] system_notify: plyer failed ({exc}); trying PowerShell fallback")
+        logger.warning("system_notify: plyer failed (%s); trying PowerShell fallback", exc)
 
     import subprocess
     import sys
@@ -70,9 +73,9 @@ def system_notify(title: str, message: str) -> None:
             ["powershell", "-WindowStyle", "Hidden", "-Command", ps_script],
             creationflags=subprocess.CREATE_NO_WINDOW,
         )
-        print("[DEBUG] system_notify: PowerShell fallback launched")
+        logger.debug("system_notify: PowerShell fallback launched")
     except Exception as exc2:
-        print(f"[DEBUG] system_notify: PowerShell fallback also failed ({exc2})")
+        logger.warning("system_notify: PowerShell fallback also failed (%s)", exc2)
 
 
 def reminder_body(content_title: str, url: str) -> str:
