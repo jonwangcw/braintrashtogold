@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      # Notifications require host OS integration — disable in container
+      ENABLE_SYSTEM_NOTIFICATIONS: "false"
+    volumes:
+      # Persist SQLite database across restarts
+      - ./app.db:/app/app.db
+      # Persist ingest artifacts
+      - ./artifacts:/app/artifacts
+      # Cache Whisper model so it isn't re-downloaded each run
+      - whisper_cache:/root/.cache/whisper
+
+volumes:
+  whisper_cache:

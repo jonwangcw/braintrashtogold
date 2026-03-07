@@ -20,57 +20,36 @@ def test_question_gen_rejects_empty_response(monkeypatch):
     monkeypatch.setattr(question_gen, "OpenRouterClient", lambda: SequenceClient(["   "]))
 
     with pytest.raises(ValueError, match="empty response"):
-        asyncio.run(question_gen.extract_concepts("text", "1"))
+        asyncio.run(question_gen.generate_questions("text", "1"))
 
 
 def test_question_gen_rejects_non_json(monkeypatch):
     monkeypatch.setattr(question_gen, "OpenRouterClient", lambda: SequenceClient(["not json"]))
 
     with pytest.raises(ValueError, match="non-JSON output"):
-        asyncio.run(question_gen.extract_concepts("text", "1"))
+        asyncio.run(question_gen.generate_questions("text", "1"))
+
+
+def test_question_gen_accepts_full_text_response(monkeypatch):
+    questions = [
+        {"bloom_level": bl, "prompt": f"Q {bl}", "expected_answer": "A", "key_points": ["p"]}
+        for bl in ["remember", "understand", "apply", "analyze", "evaluate", "create"]
+    ]
+    response = json.dumps({"questions": questions})
+    monkeypatch.setattr(question_gen, "OpenRouterClient", lambda: SequenceClient([response]))
+
+    result = asyncio.run(question_gen.generate_questions("sample text", "content-1"))
+    assert len(result.questions) == 6
+    bloom_levels = {q.bloom_level.value for q in result.questions}
+    assert bloom_levels == {"remember", "understand", "apply", "analyze", "evaluate", "create"}
 
 
 def test_question_gen_accepts_fenced_json(monkeypatch):
-    extraction = {
-        "content_id": "placeholder",
-        "concepts": [
-            {
-                "concept_id": "c1",
-                "concept_name": "Retention",
-                "summary": "Memory reinforcement",
-                "evidence": [
-                    {
-                        "evidence_id": "ev1",
-                        "quote": "text",
-                        "start_char": 0,
-                        "end_char": 4,
-                        "chunk_index": 0,
-                    }
-                ],
-            }
-        ],
-    }
-    merge = {"actions": []}
-    probe = {
-        "question_id": "temp",
-        "concept_id": "c1",
-        "bloom_level": "remember",
-        "prompt": "What is retention?",
-        "expected_answer": "Retaining core ideas over time.",
-        "key_points": ["spaced review"],
-        "required_evidence_refs": ["ev1"],
-        "sources": [{"evidence_id": "ev1", "quote": "text", "start_char": 0, "end_char": 4}],
-    }
-
-    responses = [
-        f"```json\n{json.dumps(extraction)}\n```",
-        f"```json\n{json.dumps(merge)}\n```",
-        *[json.dumps(probe) for _ in range(10)],
+    questions = [
+        {"bloom_level": "remember", "prompt": "Q", "expected_answer": "A", "key_points": ["p"]}
     ]
+    response = f"```json\n{json.dumps({'questions': questions})}\n```"
+    monkeypatch.setattr(question_gen, "OpenRouterClient", lambda: SequenceClient([response]))
 
-    client = SequenceClient(responses)
-    monkeypatch.setattr(question_gen, "OpenRouterClient", lambda: client)
-
-    result = asyncio.run(question_gen.generate_questions("text", "content-123"))
-    assert result.content_id == "content-123"
-    assert len(result.questions) == 10
+    result = asyncio.run(question_gen.generate_questions("text", "content-1"))
+    assert len(result.questions) == 1

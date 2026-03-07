@@ -9,9 +9,11 @@
   <main class="container">
     <a href="/">← Back</a>
     <h1>{{ kind|title }} Quiz</h1>
-    {% if questions %}
+
+    {% if scheduled_questions %}
+      <h2>Questions</h2>
       <ol class="quiz-question-list">
-        {% for question in questions %}
+        {% for question in scheduled_questions %}
           <li class="quiz-question-item">
             <p class="quiz-question-prompt">
               <strong>{{ question.question_type|title }}:</strong>
@@ -35,11 +37,41 @@
     {% else %}
       <p>Quiz questions will appear here once generated.</p>
     {% endif %}
+
     <form method="post" action="/quiz/{{ quiz_attempt_id }}/complete">
       {% if show_comfort_control %}
-      <label for="comfort_rating">Comfort (1-5)</label>
+      <label for="comfort_rating">How comfortable do you feel with this material? (1–5)</label>
       <input id="comfort_rating" name="comfort_rating" type="number" min="1" max="5" required />
       {% endif %}
+
+      {% if optional_questions %}
+      <details>
+        <summary><strong>Optional challenges</strong> — these do not affect your schedule</summary>
+        <ol class="quiz-question-list">
+          {% for question in optional_questions %}
+            <li class="quiz-question-item">
+              <p class="quiz-question-prompt">
+                <strong>{{ question.question_type|title }}:</strong>
+                {{ question.prompt }}
+              </p>
+              <button
+                type="button"
+                class="answer-toggle"
+                data-answer-target="answer-opt-{{ question.id }}"
+                aria-expanded="false"
+              >
+                Reveal answer
+              </button>
+              <div id="answer-opt-{{ question.id }}" class="answer-panel" hidden>
+                <p><strong>Expected answer:</strong></p>
+                <p>{{ question.expected_answer }}</p>
+              </div>
+            </li>
+          {% endfor %}
+        </ol>
+      </details>
+      {% endif %}
+
       <button type="submit">Complete quiz</button>
     </form>
   </main>

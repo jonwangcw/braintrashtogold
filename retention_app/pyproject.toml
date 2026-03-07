@@ -25,6 +25,8 @@ dependencies = [
   "plyer>=2.1",
   "python-multipart>=0.0.9",
   "openai-whisper>=20231117",
+  "pytesseract>=0.3",
+  "Pillow>=10.0",
 ]
 
 [project.optional-dependencies]

@@ -1,4 +1,5 @@
 QUESTION_PROMPT_VERSION = "v2"
+FULLTEXT_QUESTION_PROMPT_VERSION = "v1"
 GRADING_PROMPT_VERSION = "v1"
 CONCEPT_EXTRACTION_PROMPT_VERSION = "v1"
 CONCEPT_MERGE_PROMPT_VERSION = "v1"
@@ -61,6 +62,49 @@ def probe_generation_prompt(concept_payload: str, bloom_level: str, evidence_pay
         f"Generate one high-quality probe targeting Bloom level '{bloom_level}'. "
         "Ground the probe in required evidence references only. "
         f"Concept: {concept_payload}. Evidence: {evidence_payload}"
+    )
+
+
+def reconciliation_prompt(transcript: str, ocr_corpus: str) -> str:
+    return (
+        "Return ONLY valid JSON with this shape: "
+        "{\"corrected_transcript\": \"...\", \"changes\": [\"description of each change\"]}. "
+        "You are reconciling a Whisper audio transcript with OCR text from video frames. "
+        "In corrected_transcript: rewrite the transcript fixing all Whisper mishearings, "
+        "deferring to OCR for proper nouns, names, handles, technical terms, and on-screen text. "
+        "Preserve sentence flow and completeness. "
+        "In changes: list each correction as a short explanation "
+        "(e.g. 'Changed \"Boris Chen Rui\" to \"Boris Cherny\" — OCR frame at 0s shows tweet from @boris_cherny'). "
+        "If no corrections were needed, return an empty changes array.\n\n"
+        f"WHISPER TRANSCRIPT:\n{transcript}\n\n"
+        f"OCR FROM VIDEO FRAMES (timestamp | text):\n{ocr_corpus}"
+    )
+
+
+def full_text_question_prompt(
+    cleaned_text: str,
+    n_per_level: int,
+    correction_hints: str | None = None,
+) -> str:
+    hints_section = ""
+    if correction_hints:
+        hints_section = (
+            f"\nIMPORTANT — use these confirmed proper-noun spellings in questions and answers: "
+            f"{correction_hints}\n"
+        )
+    levels = "remember, understand, apply, analyze, evaluate, create"
+    total = n_per_level * 6
+    json_shape = (
+        '{"questions":[{"bloom_level":"remember","prompt":"...",'
+        '"expected_answer":"...","key_points":["..."]}]}'
+    )
+    return (
+        f"Return ONLY valid JSON with this shape: {json_shape}. "
+        f"Generate exactly {n_per_level} questions at each of the 6 Bloom's Revised Taxonomy levels: "
+        f"{levels}. Total: {total} questions. "
+        "Questions must be grounded in the provided text. "
+        f"Each key_points list must have 1-3 items summarising what the ideal answer covers."
+        f"{hints_section}\n\nTEXT:\n{cleaned_text}"
     )
 
 

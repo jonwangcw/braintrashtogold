@@ -8,13 +8,14 @@
 <body>
   <main class="container">
     <h1>Retention App</h1>
+    <p class="muted">Logged in as <strong>{{ username }}</strong> — <a href="/logout">Logout</a></p>
     <p><a class="button" href="/concept-review/due">Due concept reviews</a></p>
     <section class="card">
       <h2>Ingest Content</h2>
       <form method="post" action="/ingest" enctype="multipart/form-data">
         <label>
           Title
-          <input type="text" name="title" placeholder="Optional title" />
+          <input type="text" name="title" placeholder="Optional — auto-extracted from source" />
         </label>
         <label>
           URL
