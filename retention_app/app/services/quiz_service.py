@@ -1,7 +1,10 @@
 import json
+import logging
 from datetime import datetime
 
 from sqlalchemy import func, select
+
+logger = logging.getLogger(__name__)
 from sqlalchemy.orm import Session
 
 from app.db import models
@@ -174,17 +177,12 @@ async def create_question_set(
     kind: models.QuestionSetKind = models.QuestionSetKind.scheduled,
     debug_logger=None,
 ) -> models.QuestionSet:
-    print(
-        f"[DEBUG] create_question_set:start content_id={content_id} kind={kind} cleaned_text_len={len(cleaned_text)}"
-    )
+    logger.debug("create_question_set: content_id=%s kind=%s text_len=%d", content_id, kind, len(cleaned_text))
     generated = await generate_questions(cleaned_text, str(content_id), correction_hints=correction_hints, debug_logger=debug_logger)
-    print(f"[DEBUG] create_question_set:generated questions_count={len(generated.questions)}")
+    logger.debug("create_question_set: generated %d questions", len(generated.questions))
     for index, question in enumerate(generated.questions, start=1):
         preview = question.prompt.replace("\n", " ")[:200]
-        print(
-            f"[DEBUG] create_question_set:question[{index}] "
-            f"type={question.bloom_level.value} prompt={preview}"
-        )
+        logger.debug("create_question_set: question[%d] type=%s prompt=%s", index, question.bloom_level.value, preview)
 
     question_set = models.QuestionSet(
         content_id=content_id,
@@ -210,5 +208,5 @@ async def create_question_set(
 
     session.commit()
     session.refresh(question_set)
-    print(f"[DEBUG] create_question_set:committed question_set_id={question_set.id}")
+    logger.debug("create_question_set: committed question_set_id=%s", question_set.id)
     return question_set
