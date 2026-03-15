@@ -1,0 +1,8 @@
+datasets
+transformers
+accelerate
+trl
+anthropic
+yt-dlp
+pypdf
+# unsloth must be installed separately — see README for platform-specific instructions

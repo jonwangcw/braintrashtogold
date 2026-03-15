@@ -2,3 +2,20 @@
 app.db
 __pycache__/
 *.pyc
+finetune-plan.md
+
+# Fine-tune: model weights and large binaries
+finetune/checkpoints/
+finetune/merged_model/
+finetune/gguf_model/
+finetune/gguf_model_gguf/
+finetune/*.gguf
+finetune/unsloth_compiled_cache/
+
+# Fine-tune: raw source files (large PDFs, audio transcripts)
+finetune/data/raw/pdfs/
+finetune/data/raw/transcripts/
+finetune/data/raw/conversations/
+
+# Debug artifacts
+artifacts/

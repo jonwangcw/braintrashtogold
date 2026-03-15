@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     openrouter_api_key: str = Field(default="", alias="OPENROUTER_API_KEY")
     openrouter_model: str = Field(default="openai/gpt-4o-mini", alias="OPENROUTER_MODEL")
 
+    use_local_llm: bool = Field(default=False, alias="USE_LOCAL_LLM")
+    local_llm_url: str = Field(default="http://localhost:11434/v1", alias="LOCAL_LLM_URL")
+    local_llm_model: str = Field(default="braintrashtogold-qwen", alias="LOCAL_LLM_MODEL")
+
     whisper_model: str = Field(default="base", alias="WHISPER_MODEL")
 
     enable_email_reminders: bool = Field(default=False, alias="ENABLE_EMAIL_REMINDERS")
