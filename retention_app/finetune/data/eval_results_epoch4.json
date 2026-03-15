@@ -1,0 +1,7 @@
+{
+  "finetuned": {
+    "json_validity_pct": 69.1891891891892,
+    "bloom_accuracy_pct": 69.1891891891892,
+    "n": 185
+  }
+}

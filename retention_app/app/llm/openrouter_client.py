@@ -7,10 +7,16 @@ from app.config import settings
 
 class OpenRouterClient:
     def __init__(self) -> None:
-        self.api_key = settings.openrouter_api_key
-        self.model = settings.openrouter_model
-        if not self.api_key:
-            raise ValueError("OPENROUTER_API_KEY is required for question generation")
+        if settings.use_local_llm:
+            self.base_url = settings.local_llm_url.rstrip("/") + "/chat/completions"
+            self.model = settings.local_llm_model
+            self.api_key = "local"
+        else:
+            self.base_url = "https://openrouter.ai/api/v1/chat/completions"
+            self.model = settings.openrouter_model
+            self.api_key = settings.openrouter_api_key
+            if not self.api_key:
+                raise ValueError("OPENROUTER_API_KEY is required for question generation")
 
     def _complete_sync(self, prompt: str) -> str:
         headers = {
@@ -27,7 +33,7 @@ class OpenRouterClient:
         }
         with httpx.Client(timeout=120) as client:
             response = client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
+                self.base_url,
                 headers=headers,
                 json=payload,
             )

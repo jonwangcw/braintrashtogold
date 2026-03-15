@@ -1,0 +1,3818 @@
+{
+  "finetuned": [
+    {
+      "index": 0,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2189,
+      "is_long": true
+    },
+    {
+      "index": 1,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1399,
+      "is_long": false
+    },
+    {
+      "index": 2,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1949,
+      "is_long": false
+    },
+    {
+      "index": 3,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1870,
+      "is_long": false
+    },
+    {
+      "index": 4,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2207,
+      "is_long": true
+    },
+    {
+      "index": 5,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1947,
+      "is_long": false
+    },
+    {
+      "index": 6,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2040,
+      "is_long": false
+    },
+    {
+      "index": 7,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2117,
+      "is_long": true
+    },
+    {
+      "index": 8,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2205,
+      "is_long": true
+    },
+    {
+      "index": 9,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1966,
+      "is_long": false
+    },
+    {
+      "index": 10,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1879,
+      "is_long": false
+    },
+    {
+      "index": 11,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1374,
+      "is_long": false
+    },
+    {
+      "index": 12,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2101,
+      "is_long": true
+    },
+    {
+      "index": 13,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2076,
+      "is_long": true
+    },
+    {
+      "index": 14,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1696,
+      "is_long": false
+    },
+    {
+      "index": 15,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1411,
+      "is_long": false
+    },
+    {
+      "index": 16,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1373,
+      "is_long": false
+    },
+    {
+      "index": 17,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1688,
+      "is_long": false
+    },
+    {
+      "index": 18,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1086,
+      "is_long": false
+    },
+    {
+      "index": 19,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2532,
+      "is_long": true
+    },
+    {
+      "index": 20,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1201,
+      "is_long": false
+    },
+    {
+      "index": 21,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1374,
+      "is_long": false
+    },
+    {
+      "index": 22,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1672,
+      "is_long": false
+    },
+    {
+      "index": 23,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2006,
+      "is_long": false
+    },
+    {
+      "index": 24,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1474,
+      "is_long": false
+    },
+    {
+      "index": 25,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1568,
+      "is_long": false
+    },
+    {
+      "index": 26,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1678,
+      "is_long": false
+    },
+    {
+      "index": 27,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1402,
+      "is_long": false
+    },
+    {
+      "index": 28,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1288,
+      "is_long": false
+    },
+    {
+      "index": 29,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1562,
+      "is_long": false
+    },
+    {
+      "index": 30,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2430,
+      "is_long": true
+    },
+    {
+      "index": 31,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2727,
+      "is_long": true
+    },
+    {
+      "index": 32,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1295,
+      "is_long": false
+    },
+    {
+      "index": 33,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1966,
+      "is_long": false
+    },
+    {
+      "index": 34,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1649,
+      "is_long": false
+    },
+    {
+      "index": 35,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1614,
+      "is_long": false
+    },
+    {
+      "index": 36,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1565,
+      "is_long": false
+    },
+    {
+      "index": 37,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1375,
+      "is_long": false
+    },
+    {
+      "index": 38,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1340,
+      "is_long": false
+    },
+    {
+      "index": 39,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2144,
+      "is_long": true
+    },
+    {
+      "index": 40,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1660,
+      "is_long": false
+    },
+    {
+      "index": 41,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1905,
+      "is_long": false
+    },
+    {
+      "index": 42,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1627,
+      "is_long": false
+    },
+    {
+      "index": 43,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1328,
+      "is_long": false
+    },
+    {
+      "index": 44,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1584,
+      "is_long": false
+    },
+    {
+      "index": 45,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2059,
+      "is_long": true
+    },
+    {
+      "index": 46,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1630,
+      "is_long": false
+    },
+    {
+      "index": 47,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1426,
+      "is_long": false
+    },
+    {
+      "index": 48,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2232,
+      "is_long": true
+    },
+    {
+      "index": 49,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1319,
+      "is_long": false
+    },
+    {
+      "index": 50,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1846,
+      "is_long": false
+    },
+    {
+      "index": 51,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1983,
+      "is_long": false
+    },
+    {
+      "index": 52,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1523,
+      "is_long": false
+    },
+    {
+      "index": 53,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1264,
+      "is_long": false
+    },
+    {
+      "index": 54,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1567,
+      "is_long": false
+    },
+    {
+      "index": 55,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1403,
+      "is_long": false
+    },
+    {
+      "index": 56,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2047,
+      "is_long": false
+    },
+    {
+      "index": 57,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1563,
+      "is_long": false
+    },
+    {
+      "index": 58,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1380,
+      "is_long": false
+    },
+    {
+      "index": 59,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1832,
+      "is_long": false
+    },
+    {
+      "index": 60,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1365,
+      "is_long": false
+    },
+    {
+      "index": 61,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1422,
+      "is_long": false
+    },
+    {
+      "index": 62,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1552,
+      "is_long": false
+    },
+    {
+      "index": 63,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1359,
+      "is_long": false
+    },
+    {
+      "index": 64,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1674,
+      "is_long": false
+    },
+    {
+      "index": 65,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1733,
+      "is_long": false
+    },
+    {
+      "index": 66,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1785,
+      "is_long": false
+    },
+    {
+      "index": 67,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1664,
+      "is_long": false
+    },
+    {
+      "index": 68,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1587,
+      "is_long": false
+    },
+    {
+      "index": 69,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1332,
+      "is_long": false
+    },
+    {
+      "index": 70,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1608,
+      "is_long": false
+    },
+    {
+      "index": 71,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1463,
+      "is_long": false
+    },
+    {
+      "index": 72,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2349,
+      "is_long": true
+    },
+    {
+      "index": 73,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1953,
+      "is_long": false
+    },
+    {
+      "index": 74,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1177,
+      "is_long": false
+    },
+    {
+      "index": 75,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1582,
+      "is_long": false
+    },
+    {
+      "index": 76,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1679,
+      "is_long": false
+    },
+    {
+      "index": 77,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1495,
+      "is_long": false
+    },
+    {
+      "index": 78,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1495,
+      "is_long": false
+    },
+    {
+      "index": 79,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 3077,
+      "is_long": true
+    },
+    {
+      "index": 80,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1624,
+      "is_long": false
+    },
+    {
+      "index": 81,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1694,
+      "is_long": false
+    },
+    {
+      "index": 82,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2237,
+      "is_long": true
+    },
+    {
+      "index": 83,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1306,
+      "is_long": false
+    },
+    {
+      "index": 84,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1413,
+      "is_long": false
+    },
+    {
+      "index": 85,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1883,
+      "is_long": false
+    },
+    {
+      "index": 86,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1558,
+      "is_long": false
+    },
+    {
+      "index": 87,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1964,
+      "is_long": false
+    },
+    {
+      "index": 88,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1797,
+      "is_long": false
+    },
+    {
+      "index": 89,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2147,
+      "is_long": true
+    },
+    {
+      "index": 90,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1700,
+      "is_long": false
+    },
+    {
+      "index": 91,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1758,
+      "is_long": false
+    },
+    {
+      "index": 92,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1756,
+      "is_long": false
+    },
+    {
+      "index": 93,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 960,
+      "is_long": false
+    },
+    {
+      "index": 94,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1477,
+      "is_long": false
+    },
+    {
+      "index": 95,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1398,
+      "is_long": false
+    },
+    {
+      "index": 96,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2403,
+      "is_long": true
+    },
+    {
+      "index": 97,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1203,
+      "is_long": false
+    },
+    {
+      "index": 98,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1664,
+      "is_long": false
+    },
+    {
+      "index": 99,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1614,
+      "is_long": false
+    },
+    {
+      "index": 100,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1907,
+      "is_long": false
+    },
+    {
+      "index": 101,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1673,
+      "is_long": false
+    },
+    {
+      "index": 102,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1697,
+      "is_long": false
+    },
+    {
+      "index": 103,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1861,
+      "is_long": false
+    },
+    {
+      "index": 104,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1392,
+      "is_long": false
+    },
+    {
+      "index": 105,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1659,
+      "is_long": false
+    },
+    {
+      "index": 106,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1266,
+      "is_long": false
+    },
+    {
+      "index": 107,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1319,
+      "is_long": false
+    },
+    {
+      "index": 108,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1371,
+      "is_long": false
+    },
+    {
+      "index": 109,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1384,
+      "is_long": false
+    },
+    {
+      "index": 110,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1082,
+      "is_long": false
+    },
+    {
+      "index": 111,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1883,
+      "is_long": false
+    },
+    {
+      "index": 112,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1648,
+      "is_long": false
+    },
+    {
+      "index": 113,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1975,
+      "is_long": false
+    },
+    {
+      "index": 114,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1522,
+      "is_long": false
+    },
+    {
+      "index": 115,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1514,
+      "is_long": false
+    },
+    {
+      "index": 116,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1681,
+      "is_long": false
+    },
+    {
+      "index": 117,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1249,
+      "is_long": false
+    },
+    {
+      "index": 118,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2038,
+      "is_long": false
+    },
+    {
+      "index": 119,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1264,
+      "is_long": false
+    },
+    {
+      "index": 120,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1385,
+      "is_long": false
+    },
+    {
+      "index": 121,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1265,
+      "is_long": false
+    },
+    {
+      "index": 122,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1619,
+      "is_long": false
+    },
+    {
+      "index": 123,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1399,
+      "is_long": false
+    },
+    {
+      "index": 124,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1963,
+      "is_long": false
+    },
+    {
+      "index": 125,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1590,
+      "is_long": false
+    },
+    {
+      "index": 126,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1584,
+      "is_long": false
+    },
+    {
+      "index": 127,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 4066,
+      "is_long": true
+    },
+    {
+      "index": 128,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1501,
+      "is_long": false
+    },
+    {
+      "index": 129,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2357,
+      "is_long": true
+    },
+    {
+      "index": 130,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2304,
+      "is_long": true
+    },
+    {
+      "index": 131,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1346,
+      "is_long": false
+    },
+    {
+      "index": 132,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1505,
+      "is_long": false
+    },
+    {
+      "index": 133,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 3884,
+      "is_long": true
+    },
+    {
+      "index": 134,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1353,
+      "is_long": false
+    },
+    {
+      "index": 135,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1224,
+      "is_long": false
+    },
+    {
+      "index": 136,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2437,
+      "is_long": true
+    },
+    {
+      "index": 137,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 3544,
+      "is_long": true
+    },
+    {
+      "index": 138,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1531,
+      "is_long": false
+    },
+    {
+      "index": 139,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1545,
+      "is_long": false
+    },
+    {
+      "index": 140,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1435,
+      "is_long": false
+    },
+    {
+      "index": 141,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1582,
+      "is_long": false
+    },
+    {
+      "index": 142,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1442,
+      "is_long": false
+    },
+    {
+      "index": 143,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1775,
+      "is_long": false
+    },
+    {
+      "index": 144,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1596,
+      "is_long": false
+    },
+    {
+      "index": 145,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1815,
+      "is_long": false
+    },
+    {
+      "index": 146,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1505,
+      "is_long": false
+    },
+    {
+      "index": 147,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1673,
+      "is_long": false
+    },
+    {
+      "index": 148,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 3304,
+      "is_long": true
+    },
+    {
+      "index": 149,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1387,
+      "is_long": false
+    },
+    {
+      "index": 150,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2114,
+      "is_long": true
+    },
+    {
+      "index": 151,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1132,
+      "is_long": false
+    },
+    {
+      "index": 152,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1452,
+      "is_long": false
+    },
+    {
+      "index": 153,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1007,
+      "is_long": false
+    },
+    {
+      "index": 154,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1012,
+      "is_long": false
+    },
+    {
+      "index": 155,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1689,
+      "is_long": false
+    },
+    {
+      "index": 156,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1355,
+      "is_long": false
+    },
+    {
+      "index": 157,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1617,
+      "is_long": false
+    },
+    {
+      "index": 158,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 2020,
+      "is_long": false
+    },
+    {
+      "index": 159,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2720,
+      "is_long": true
+    },
+    {
+      "index": 160,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2046,
+      "is_long": false
+    },
+    {
+      "index": 161,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2506,
+      "is_long": true
+    },
+    {
+      "index": 162,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1712,
+      "is_long": false
+    },
+    {
+      "index": 163,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2205,
+      "is_long": true
+    },
+    {
+      "index": 164,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2097,
+      "is_long": true
+    },
+    {
+      "index": 165,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1413,
+      "is_long": false
+    },
+    {
+      "index": 166,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1647,
+      "is_long": false
+    },
+    {
+      "index": 167,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1430,
+      "is_long": false
+    },
+    {
+      "index": 168,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1794,
+      "is_long": false
+    },
+    {
+      "index": 169,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1393,
+      "is_long": false
+    },
+    {
+      "index": 170,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1454,
+      "is_long": false
+    },
+    {
+      "index": 171,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1719,
+      "is_long": false
+    },
+    {
+      "index": 172,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1514,
+      "is_long": false
+    },
+    {
+      "index": 173,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1299,
+      "is_long": false
+    },
+    {
+      "index": 174,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2271,
+      "is_long": true
+    },
+    {
+      "index": 175,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1319,
+      "is_long": false
+    },
+    {
+      "index": 176,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1631,
+      "is_long": false
+    },
+    {
+      "index": 177,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1813,
+      "is_long": false
+    },
+    {
+      "index": 178,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1949,
+      "is_long": false
+    },
+    {
+      "index": 179,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 1287,
+      "is_long": false
+    },
+    {
+      "index": 180,
+      "valid_json": false,
+      "bloom_match": false,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [],
+      "full_tokens": 2552,
+      "is_long": true
+    },
+    {
+      "index": 181,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1293,
+      "is_long": false
+    },
+    {
+      "index": 182,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1360,
+      "is_long": false
+    },
+    {
+      "index": 183,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1493,
+      "is_long": false
+    },
+    {
+      "index": 184,
+      "valid_json": true,
+      "bloom_match": true,
+      "expected_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "model_bloom_levels": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ],
+      "full_tokens": 1895,
+      "is_long": false
+    }
+  ]
+}
